@@ -6,8 +6,9 @@ public class Game {
     public Game(){
         gamePanel = new GamePanel();
         window = new Window(gamePanel);
+        gamePanel.requestFocus();
       
         
-        System.out.println("i am alive again !");
+       
     }
 }
