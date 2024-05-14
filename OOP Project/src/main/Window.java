@@ -10,9 +10,11 @@ public class Window extends JFrame {
         jframe = new JFrame();
 
         
-        jframe.setSize(400,400);
+       
         jframe.setVisible(true);
         jframe.add(gamePanel);
+        jframe.setResizable(false);
+        jframe.pack();
         jframe.setLocationRelativeTo(null);
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
