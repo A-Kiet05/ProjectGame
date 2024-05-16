@@ -43,8 +43,11 @@ public class Player extends Entity
   }
 
  
+
+ 
   
 private void setAnimations(){
+    int startAnimation = playerAction;
     if(isMoving){
         playerAction = playerConstants.RUNNING;
     }
@@ -54,7 +57,15 @@ private void setAnimations(){
     if(attacking){
         playerAction = playerConstants.ATTACKING;
     }
+    
+    if ( startAnimation != playerAction){
+        resetAnimation();
+    }
 }
+   public void resetAnimation(){
+    aniTick = 0 ;
+    aniIndex = 0 ;
+   }
 
  private void setPosition(){
        isMoving =false;
