@@ -3,13 +3,13 @@ package main;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
+
 import java.awt.image.BufferedImage;
-import java.io.File;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -47,6 +47,7 @@ public class GamePanel extends JPanel{
     }
     
     private void loadAnimation(){
+
         Animations = new BufferedImage[9][6];
         for(int j = 0 ; j < Animations.length ; ++j){
         for (int i= 0 ; i < Animations[j].length ; ++i){
@@ -79,20 +80,12 @@ public class GamePanel extends JPanel{
 
     public void setPanelSize(){
         Dimension size = new Dimension(1280,800);
-        setMaximumSize(size);
-        setMinimumSize(size);
+       
         setPreferredSize(size);
     }
 
 
-    public void changeXdelta( int value){
-        xDelta += value;
-       
-    }
-    public void changeYdelta(int value){
-        yDelta+= value;
-       
-    }
+    
     public void setRecPos( int x , int y){
         this.xDelta = x;
         this.yDelta = y;
@@ -114,6 +107,7 @@ public class GamePanel extends JPanel{
         this.playerDirection = direction;
         isMoving = true;
     }
+    
     public void setMoving (boolean isMoving){
         this.isMoving = isMoving;
         
@@ -145,29 +139,25 @@ public class GamePanel extends JPanel{
                 break;
 
         
-            default:
-                break;
+            
         }
     }
  }
 
+    public void updateGame(){ 
+        updateAniTick();
+        setAnimations();
+        setPosition();
+    }
+
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-      
-       updateAniTick();
-       setAnimations();
-       setPosition();
-
+        
         g.drawImage(Animations[playerAction][aniIndex],(int) xDelta,(int) yDelta,128 , 80, null);
-        
-       
-       
-        
-
-
-        repaint();
+      
     }
+    
     
      
 }
