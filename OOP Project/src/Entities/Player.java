@@ -8,6 +8,7 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import main.GamePanel;
+import ultiz.loadSave;
 import ultiz.Constant.Direction;
 import ultiz.Constant.playerConstants;
 
@@ -102,10 +103,8 @@ private void setAnimations(){
      }
 
      public void LoadImg(){
-         InputStream is = GamePanel.class.getResourceAsStream("/images/player_sprites.png");
-       
-       try {
-         BufferedImage img = ImageIO.read(is);
+        
+        BufferedImage img = loadSave.GetSpritesAtlas(loadSave.PLAYER_ATLAS);
 
           Animations = new BufferedImage[9][6];
         for(int j = 0 ; j < Animations.length ; ++j)
@@ -113,17 +112,7 @@ private void setAnimations(){
             Animations[j][i] = img.getSubimage(i*64, j*40, 64, 40);
         
            
-       } catch ( IOException e) {
-        // TODO: handle exception
-           e.printStackTrace();
-       }finally{
-        try {
-            is.close();
-        } catch (IOException e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
-       }
+      
       
       
     
