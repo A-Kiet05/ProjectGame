@@ -1,15 +1,19 @@
 package main;
+import Entities.*;
+import java.awt.Graphics;
 
 public class Game implements Runnable {
     private Window window;
     private GamePanel gamePanel;
     private Thread gameThread;
+    private Player player;
 
     private final int FPS_SETTINGS = 120;
     private final int UPS_SETTINGS = 200;
 
     public Game(){
-        gamePanel = new GamePanel();
+        initClasses();
+        gamePanel = new GamePanel(this);
         window = new Window(gamePanel);
 
         gamePanel.setFocusable(true);
@@ -18,14 +22,22 @@ public class Game implements Runnable {
         startGameLoop();
      
     }
+
+    private void initClasses(){
+        player = new Player (200,200);
+    }
+
     public void startGameLoop(){
         gameThread = new Thread(this);
         gameThread.start();
     }
 
     public void update(){
-         gamePanel.updateGame();
+         player.update();
         
+    }
+    public void draw( Graphics g ){
+        player.render(g);
     }
 
 
@@ -75,5 +87,8 @@ public class Game implements Runnable {
             }
             
         }
+    }
+    public Player getPlayer(){
+        return player;
     }
 }

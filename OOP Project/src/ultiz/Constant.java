@@ -15,11 +15,11 @@ public class Constant {
         public static final int JUMP = 3;
         public static final int FALLING = 4;
         public static final int GROUND = 5;
-        public static final int HURT = 6;
-        public static final int ATTACKING = 7;
-        public static final int JUMP_ATTACK_1 = 8;
-        public static final int JUMP_ATTACK_2 = 9 ;
-        public static final int BACKGROUND = 10;
+        
+        public static final int ATTACKING = 6;
+        public static final int JUMP_ATTACK_1 = 7;
+        public static final int JUMP_ATTACK_2 = 8 ;
+        public static final int BACKGROUND = 9;
 
     
         public static int GetAmountSprites( int player_action){
@@ -37,8 +37,7 @@ public class Constant {
                 case JUMP_ATTACK_2:
                 return 3;
 
-                case HURT :
-                return 4;
+                
                 case GROUND:
                 return 2;
                 
