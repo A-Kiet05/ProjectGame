@@ -6,13 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
-
+import static ultiz.helpMethods.CanMoveHere;
 import main.GamePanel;
 import ultiz.loadSave;
 import ultiz.Constant.Direction;
 import ultiz.Constant.playerConstants;
 
 import static ultiz.Constant.playerConstants;
+import static main.Game.GAME_SCALE;
+import static main.Game.TILES_SIZE;
 import static ultiz.Constant.Direction;
 
 public class Player extends Entity
@@ -24,11 +26,14 @@ public class Player extends Entity
    
    private boolean isMoving = false , attacking = false;
    private float playerSpeed =  1.5f ;
+   private float xDrawOffset = 21 * GAME_SCALE;
+   private float yDrawOffset = 4 * GAME_SCALE;
    private boolean left , right , up , down ;
 
     public Player (float x , float y , int width ,int height ){
         super( x, y, width, height);
         LoadImg();
+        initHitbox(x , y , 20*GAME_SCALE , 28*GAME_SCALE);
         
 
     }
@@ -72,35 +77,46 @@ private void setAnimations(){
 
  private void setPosition(){
        isMoving =false;
+       if (!left && !right && !up && !down)
+       return ;
+
+       float xSpeed = 0 , ySpeed = 0 ;
+
        if (left && !right){
-         x -= playerSpeed;
+        xSpeed = -playerSpeed;
          isMoving = true;
        }
         else if (!left && right){
-       x += playerSpeed;
+       xSpeed = playerSpeed;
        isMoving = true;
         }
 
 
         if ( up && !down ){
-            y -= playerSpeed;
+            ySpeed = -playerSpeed;
             isMoving= true;
         }
         else if( !up && down){
-            y += playerSpeed;
+            ySpeed = playerSpeed;
             isMoving = true;
         }
+
+      if(CanMoveHere( hitBox.x + xSpeed , hitBox.y + ySpeed , hitBox.width , hitBox.height , lvldata)){
+           hitBox.x += xSpeed;
+           hitBox.y += ySpeed;
+           isMoving = true;
+      }
 
  }
 
      public void render(Graphics g){
          drawHitbox(g);
-         g.drawImage(Animations[playerAction][aniIndex],(int) x,(int) y,128 , 80, null);
+         g.drawImage(Animations[playerAction][aniIndex],(int)( hitBox.x  - xDrawOffset) ,(int) (hitBox.y - yDrawOffset),width , height, null);
      }
 
      public void update(){
         setPosition();
-        updateHitbox();
+      //   updateHitbox();
         updateAniTick();
         setAnimations();
         
