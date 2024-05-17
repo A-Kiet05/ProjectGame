@@ -38,8 +38,11 @@ public class Game implements Runnable {
     }
 
     private void initClasses(){
+
         levelmanager = new levelManager(this);
-        player = new Player (200,200);
+        player = new Player (200, 200 , (int) (64*GAME_SCALE) ,(int) (40*GAME_SCALE));
+        player.loadLevelData(levelmanager.getCurrentLevel().GetLevelData());
+
     }
 
     public void startGameLoop(){

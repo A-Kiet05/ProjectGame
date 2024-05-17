@@ -20,14 +20,16 @@ public class Player extends Entity
     private BufferedImage[][] Animations;
     private int aniIndex=0, aniTick=0 , aniSpeed = 25;
     private int playerAction =playerConstants.IDLE;
+    private int[][] lvldata;
    
    private boolean isMoving = false , attacking = false;
    private float playerSpeed =  1.5f ;
    private boolean left , right , up , down ;
 
-    public Player (float x , float y){
-        super(x,y);
+    public Player (float x , float y , int width ,int height ){
+        super( x, y, width, height);
         LoadImg();
+        
 
     }
 
@@ -92,14 +94,16 @@ private void setAnimations(){
  }
 
      public void render(Graphics g){
-         
+         drawHitbox(g);
          g.drawImage(Animations[playerAction][aniIndex],(int) x,(int) y,128 , 80, null);
      }
+
      public void update(){
-        
+        setPosition();
+        updateHitbox();
         updateAniTick();
         setAnimations();
-        setPosition();
+        
      }
 
      public void LoadImg(){
@@ -116,6 +120,10 @@ private void setAnimations(){
       
       
     
+     }
+
+     public void loadLevelData( int[][] lvldata){
+        this.lvldata = lvldata;
      }
      public void resetDirection(){
         up = false;
