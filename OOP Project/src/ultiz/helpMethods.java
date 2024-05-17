@@ -3,6 +3,8 @@ package ultiz;
 import main.Game;
 import static main.Game.*;
 
+import java.awt.geom.Rectangle2D;
+
 public class helpMethods {
     private Game game;
 
@@ -30,5 +32,33 @@ public class helpMethods {
             return true;
         }
         return false;
+    }
+    public static int GetXPosCollide(Rectangle2D.Float hitBox , float xSpeed ){
+        int currentTiles = (int) (hitBox.x /TILES_SIZE);
+        if( xSpeed > 0 ){
+        //right
+        int tileXPos = currentTiles * TILES_SIZE;
+        int xDrawOffset = (int) (TILES_SIZE - hitBox.width);
+        return tileXPos - xDrawOffset + 1;
+        }
+        else{
+            //left
+            return currentTiles * TILES_SIZE;
+        }
+
+    }
+
+    public static int GetYPosAtRoofOrFalling(Rectangle2D.Float hitBox , float airSpeed){
+        int currentTiles = (int) (hitBox.y /TILES_SIZE);
+        if(airSpeed >0){
+            //falling 
+            int tileYPos = currentTiles *TILES_SIZE;
+            int yDrawOffset = (int) (TILES_SIZE - hitBox.height);
+            return tileYPos - yDrawOffset +1;
+        }
+        else{
+            //jumping
+            return currentTiles *TILES_SIZE;
+        }
     }
 }

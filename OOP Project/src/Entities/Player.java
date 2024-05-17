@@ -4,9 +4,10 @@ import java.awt.image.BufferedImage;
 
 import java.io.IOException;
 import java.io.InputStream;
-
+import static ultiz.helpMethods.GetXPosCollide;
 import javax.imageio.ImageIO;
 import static ultiz.helpMethods.CanMoveHere;
+import static ultiz.helpMethods.GetYPosAtRoofOrFalling;
 import main.GamePanel;
 import ultiz.loadSave;
 import ultiz.Constant.Direction;
@@ -28,7 +29,12 @@ public class Player extends Entity
    private float playerSpeed =  1.5f ;
    private float xDrawOffset = 21 * GAME_SCALE;
    private float yDrawOffset = 4 * GAME_SCALE;
-   private boolean left , right , up , down ;
+   private boolean left , right , up , down, jump;
+   private float airSpeed = 0f;
+   private float gravity = 0.04f * GAME_SCALE;
+   private float jumpSpeed = -2.2f * GAME_SCALE;
+   private float fallAfterCollision = 0.5f * GAME_SCALE;
+   private boolean inAir = false;
 
     public Player (float x , float y , int width ,int height ){
         super( x, y, width, height);
@@ -77,36 +83,75 @@ private void setAnimations(){
 
  private void setPosition(){
        isMoving =false;
+       jump = false;
+
+      
+       
        if (!left && !right && !up && !down)
        return ;
+       if(jump)
+       jump();
 
-       float xSpeed = 0 , ySpeed = 0 ;
+       float xSpeed = 0 ;
 
-       if (left && !right){
-        xSpeed = -playerSpeed;
+       if (left )
+        xSpeed -= playerSpeed;
+        
+       
+       if ( right)
+       xSpeed += playerSpeed;
+      
+        
+
+       if(inAir){
+         if(CanMoveHere( hitBox.x  , hitBox.y + airSpeed , hitBox.width, hitBox.height , lvldata)){
+            hitBox.y += airSpeed;
+            airSpeed += gravity;
+            updataXPos(xSpeed);
+       }
+         else {
+           hitBox.y = GetYPosAtRoofOrFalling(hitBox , airSpeed);
+           if(airSpeed > 0){
+              inAirReset();
+           }else{
+            // airSpeed < 0 
+            airSpeed = fallAfterCollision;
+            updataXPos(xSpeed);
+           }
+       }
+
+       }else{
+         updataXPos(xSpeed);
          isMoving = true;
        }
-        else if (!left && right){
-       xSpeed = playerSpeed;
-       isMoving = true;
-        }
 
 
-        if ( up && !down ){
-            ySpeed = -playerSpeed;
-            isMoving= true;
-        }
-        else if( !up && down){
-            ySpeed = playerSpeed;
-            isMoving = true;
-        }
+      // if(CanMoveHere( hitBox.x + xSpeed , hitBox.y + ySpeed , hitBox.width , hitBox.height , lvldata)){
+      //      hitBox.x += xSpeed;
+      //      hitBox.y += ySpeed;
+      //      isMoving = true;
+      // }
 
-      if(CanMoveHere( hitBox.x + xSpeed , hitBox.y + ySpeed , hitBox.width , hitBox.height , lvldata)){
+ }
+ private void jump(){
+    if(inAir)
+      return;
+    airSpeed = jumpSpeed;
+    inAir = true;
+ }
+
+ private void inAirReset(){
+   inAir = false;
+   airSpeed = 0 ;
+ }
+ private void updataXPos(float xSpeed){
+    if(CanMoveHere( hitBox.x + xSpeed , hitBox.y  , hitBox.width , hitBox.height , lvldata)){
            hitBox.x += xSpeed;
-           hitBox.y += ySpeed;
-           isMoving = true;
+           
       }
-
+      else{
+         hitBox.x = GetXPosCollide(hitBox ,xSpeed);
+      }
  }
 
      public void render(Graphics g){
@@ -179,6 +224,9 @@ private void setAnimations(){
      }
      public void setLeft(boolean left){
         this.left = left;
+     }
+     public void setJump(boolean jump){
+      this.jump = jump;
      }
 
 
