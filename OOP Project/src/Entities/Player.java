@@ -8,6 +8,8 @@ import static ultiz.helpMethods.GetXPosCollide;
 import javax.imageio.ImageIO;
 import static ultiz.helpMethods.CanMoveHere;
 import static ultiz.helpMethods.GetYPosAtRoofOrFalling;
+import static ultiz.helpMethods.IsEntityOnTheFloor;
+
 import main.GamePanel;
 import ultiz.loadSave;
 import ultiz.Constant.Direction;
@@ -32,14 +34,14 @@ public class Player extends Entity
    private boolean left , right , up , down, jump;
    private float airSpeed = 0f;
    private float gravity = 0.04f * GAME_SCALE;
-   private float jumpSpeed = -2.2f * GAME_SCALE;
+   private float jumpSpeed = -2.25f * GAME_SCALE;
    private float fallAfterCollision = 0.5f * GAME_SCALE;
    private boolean inAir = false;
 
     public Player (float x , float y , int width ,int height ){
         super( x, y, width, height);
         LoadImg();
-        initHitbox(x , y , 20*GAME_SCALE , 28*GAME_SCALE);
+        initHitbox(x , y , 20*GAME_SCALE , 27*GAME_SCALE);
         
 
     }
@@ -68,6 +70,13 @@ private void setAnimations(){
     else{
         playerAction = playerConstants.IDLE;
     }
+    if(inAir){
+      if(airSpeed <0 )
+      playerAction = playerConstants.JUMP;
+      else
+      playerAction =playerConstants.FALLING;
+    }
+    
     if(attacking){
         playerAction = playerConstants.ATTACKING;
     }
@@ -83,15 +92,18 @@ private void setAnimations(){
 
  private void setPosition(){
        isMoving =false;
-       jump = false;
-
       
+
+       if(jump){
+
+         jump();
+         
+      }
+
        
        if (!left && !right && !up && !down)
        return ;
-       if(jump)
-       jump();
-
+       
        float xSpeed = 0 ;
 
        if (left )
@@ -101,27 +113,32 @@ private void setAnimations(){
        if ( right)
        xSpeed += playerSpeed;
       
-        
+       if(!inAir)
+         if(!IsEntityOnTheFloor(hitBox, lvldata))
+          inAir = true;
+       
+         
 
        if(inAir){
          if(CanMoveHere( hitBox.x  , hitBox.y + airSpeed , hitBox.width, hitBox.height , lvldata)){
             hitBox.y += airSpeed;
             airSpeed += gravity;
-            updataXPos(xSpeed);
+            updateXPos(xSpeed);
+           
        }
-         else {
+          else {
            hitBox.y = GetYPosAtRoofOrFalling(hitBox , airSpeed);
-           if(airSpeed > 0){
+           if(airSpeed > 0)
               inAirReset();
-           }else{
+           else
             // airSpeed < 0 
             airSpeed = fallAfterCollision;
-            updataXPos(xSpeed);
-           }
+            updateXPos(xSpeed);
+           
        }
 
        }else{
-         updataXPos(xSpeed);
+         updateXPos(xSpeed);
          isMoving = true;
        }
 
@@ -135,16 +152,19 @@ private void setAnimations(){
  }
  private void jump(){
     if(inAir)
-      return;
+    return;
     airSpeed = jumpSpeed;
     inAir = true;
+    
+    
+      
  }
 
  private void inAirReset(){
    inAir = false;
    airSpeed = 0 ;
  }
- private void updataXPos(float xSpeed){
+ private void updateXPos(float xSpeed){
     if(CanMoveHere( hitBox.x + xSpeed , hitBox.y  , hitBox.width , hitBox.height , lvldata)){
            hitBox.x += xSpeed;
            
@@ -185,6 +205,9 @@ private void setAnimations(){
 
      public void loadLevelData( int[][] lvldata){
         this.lvldata = lvldata;
+        if(!IsEntityOnTheFloor(hitBox, lvldata)){
+         inAir = true;
+        }
      }
      public void resetDirection(){
         up = false;

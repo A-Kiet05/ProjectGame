@@ -12,8 +12,9 @@ public class Constant {
     public static class playerConstants {
         public static final int IDLE = 0;
         public static final int RUNNING = 1;
-        public static final int JUMP = 3;
-        public static final int FALLING = 4;
+        public static final int JUMP = 2;
+        public static final int FALLING = 3;
+        public static final int HURT = 4;
         public static final int GROUND = 5;
         
         public static final int ATTACKING = 6;
@@ -41,7 +42,8 @@ public class Constant {
                 case GROUND:
                 return 2;
                 
-               
+               case HURT:
+               return 2;
 
               
                 default:

@@ -39,7 +39,7 @@ public class helpMethods {
         //right
         int tileXPos = currentTiles * TILES_SIZE;
         int xDrawOffset = (int) (TILES_SIZE - hitBox.width);
-        return tileXPos - xDrawOffset + 1;
+        return tileXPos +  xDrawOffset - 1;
         }
         else{
             //left
@@ -52,13 +52,20 @@ public class helpMethods {
         int currentTiles = (int) (hitBox.y /TILES_SIZE);
         if(airSpeed >0){
             //falling 
-            int tileYPos = currentTiles *TILES_SIZE;
+            int tileYPos = currentTiles * TILES_SIZE;
             int yDrawOffset = (int) (TILES_SIZE - hitBox.height);
-            return tileYPos - yDrawOffset +1;
+            return tileYPos + yDrawOffset - 1;
         }
         else{
             //jumping
-            return currentTiles *TILES_SIZE;
+            return currentTiles * TILES_SIZE;
         }
+    }
+
+    public static boolean IsEntityOnTheFloor(Rectangle2D.Float hitBox , int[][] lvldata ){
+        if(!IsSolid(hitBox.x, hitBox.y + hitBox.height + 1, lvldata))
+          if(!IsSolid(hitBox.x + hitBox.width , hitBox.y +hitBox.height +1 , lvldata))
+             return false;
+        return true;
     }
 }
