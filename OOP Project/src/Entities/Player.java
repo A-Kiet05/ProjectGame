@@ -36,7 +36,7 @@ public class Player extends Entity
    private float gravity = 0.04f * GAME_SCALE;
    private float jumpSpeed = -2.25f * GAME_SCALE;
    private float fallAfterCollision = 0.5f * GAME_SCALE;
-   private boolean inAir = false;
+   private boolean inAir = false ;
 
     public Player (float x , float y , int width ,int height ){
         super( x, y, width, height);
@@ -64,22 +64,25 @@ public class Player extends Entity
   
 private void setAnimations(){
     int startAnimation = playerAction;
-    if(isMoving){
+    
+    if(isMoving)
         playerAction = playerConstants.RUNNING;
-    }
-    else{
+    
+    else
         playerAction = playerConstants.IDLE;
-    }
+    
+    
     if(inAir){
-      if(airSpeed <0 )
-      playerAction = playerConstants.JUMP;
-      else
-      playerAction =playerConstants.FALLING;
+       if (airSpeed < 0 )
+           playerAction = playerConstants.JUMP;
+       else 
+           playerAction = playerConstants.FALLING;
+       
     }
     
-    if(attacking){
+    if(attacking)
         playerAction = playerConstants.ATTACKING;
-    }
+    
     
     if ( startAnimation != playerAction){
         resetAnimation();
@@ -91,74 +94,68 @@ private void setAnimations(){
    }
 
  private void setPosition(){
-       isMoving =false;
+      isMoving = false;
+      
       
 
-       if(jump){
+      if(jump){
 
          jump();
          
       }
 
        
-       if (!left && !right && !up && !down)
+      if (!left && !right && !inAir)
        return ;
        
-       float xSpeed = 0 ;
+      float xSpeed = 0 ;
 
-       if (left )
+      if (left )
         xSpeed -= playerSpeed;
         
        
-       if ( right)
+      if ( right)
        xSpeed += playerSpeed;
       
-       if(!inAir)
+      if(!inAir)
          if(!IsEntityOnTheFloor(hitBox, lvldata))
-          inAir = true;
+             inAir = true;
        
          
 
-       if(inAir){
+      if(inAir){
          if(CanMoveHere( hitBox.x  , hitBox.y + airSpeed , hitBox.width, hitBox.height , lvldata)){
             hitBox.y += airSpeed;
             airSpeed += gravity;
             updateXPos(xSpeed);
+            inAirReset();
            
-       }
-          else {
+           
+         }
+         else {
            hitBox.y = GetYPosAtRoofOrFalling(hitBox , airSpeed);
            if(airSpeed > 0)
-              inAirReset();
+              inAirReset();  
            else
             // airSpeed < 0 
-            airSpeed = fallAfterCollision;
-            updateXPos(xSpeed);
-           
-       }
-
-       }else{
+              airSpeed = fallAfterCollision;
+              updateXPos(xSpeed);
+              
+         }
+      }
+      else{
          updateXPos(xSpeed);
-         isMoving = true;
-       }
-
-
-      // if(CanMoveHere( hitBox.x + xSpeed , hitBox.y + ySpeed , hitBox.width , hitBox.height , lvldata)){
-      //      hitBox.x += xSpeed;
-      //      hitBox.y += ySpeed;
-      //      isMoving = true;
-      // }
+           isMoving = true;
+      }
 
  }
  private void jump(){
-    if(inAir)
-    return;
-    airSpeed = jumpSpeed;
-    inAir = true;
+   if(inAir)
+        return;
+   inAir = true;
+   airSpeed = jumpSpeed;
     
-    
-      
- }
+}
 
  private void inAirReset(){
    inAir = false;
@@ -169,13 +166,13 @@ private void setAnimations(){
            hitBox.x += xSpeed;
            
       }
-      else{
-         hitBox.x = GetXPosCollide(hitBox ,xSpeed);
+    else{
+           hitBox.x = GetXPosCollide(hitBox ,xSpeed);
       }
  }
 
      public void render(Graphics g){
-         drawHitbox(g);
+         // drawHitbox(g);
          g.drawImage(Animations[playerAction][aniIndex],(int)( hitBox.x  - xDrawOffset) ,(int) (hitBox.y - yDrawOffset),width , height, null);
      }
 
@@ -206,12 +203,12 @@ private void setAnimations(){
      public void loadLevelData( int[][] lvldata){
         this.lvldata = lvldata;
         if(!IsEntityOnTheFloor(hitBox, lvldata)){
-         inAir = true;
+             inAir = true ;
+           
         }
      }
      public void resetDirection(){
-        up = false;
-        down = false;
+       
         right = false;
         left = false;
      }
@@ -224,18 +221,8 @@ private void setAnimations(){
          this.attacking = attacking;
      }
 
-     public boolean isUp(){
-        return up;
-     }
-     public void setUp(boolean up){
-        this.up = up;
-     }
-     public boolean isDown(){
-        return down;
-     }
-     public void setDown(boolean down){
-        this.down = down;
-     }
+    
+     
      public boolean isRight(){
         return right;
      }
