@@ -41,14 +41,14 @@ public class Constant {
                 
                case GROUND:
                 return 2;
-               case FALLING :
-                return 1;
+               
+                
                case HURT:
                return 2;
 
-              
-                default:
-                return 0;
+               case FALLING :
+               default:
+                return 1;
                    
               }
         }

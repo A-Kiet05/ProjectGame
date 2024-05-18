@@ -65,23 +65,28 @@ public class Player extends Entity
 private void setAnimations(){
     int startAnimation = playerAction;
     
-    if(isMoving)
+    if(isMoving){
         playerAction = playerConstants.RUNNING;
+    }
     
-    else
+    else{
         playerAction = playerConstants.IDLE;
+    }
     
     
     if(inAir){
        if (airSpeed < 0 )
            playerAction = playerConstants.JUMP;
-       else 
+       else
            playerAction = playerConstants.FALLING;
+       
+
        
     }
     
-    if(attacking)
+    if(attacking){
         playerAction = playerConstants.ATTACKING;
+    }
     
     
     if ( startAnimation != playerAction){
@@ -95,6 +100,7 @@ private void setAnimations(){
 
  private void setPosition(){
       isMoving = false;
+      inAir = false;
       
       
 
@@ -127,8 +133,9 @@ private void setAnimations(){
          if(CanMoveHere( hitBox.x  , hitBox.y + airSpeed , hitBox.width, hitBox.height , lvldata)){
             hitBox.y += airSpeed;
             airSpeed += gravity;
+            
             updateXPos(xSpeed);
-            inAirReset();
+            
            
            
          }
@@ -139,7 +146,9 @@ private void setAnimations(){
            else
             // airSpeed < 0 
               airSpeed = fallAfterCollision;
+              
               updateXPos(xSpeed);
+              
               
          }
       }
@@ -160,6 +169,7 @@ private void setAnimations(){
  private void inAirReset(){
    inAir = false;
    airSpeed = 0 ;
+  
  }
  private void updateXPos(float xSpeed){
     if(CanMoveHere( hitBox.x + xSpeed , hitBox.y  , hitBox.width , hitBox.height , lvldata)){
@@ -202,10 +212,10 @@ private void setAnimations(){
 
      public void loadLevelData( int[][] lvldata){
         this.lvldata = lvldata;
-        if(!IsEntityOnTheFloor(hitBox, lvldata)){
-             inAir = true ;
+        if(!IsEntityOnTheFloor(hitBox, lvldata))
+              inAir = true ;
            
-        }
+        
      }
      public void resetDirection(){
        
