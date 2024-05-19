@@ -1,18 +1,22 @@
 package main;
 import Entities.*;
+import gamestates.gameStates;
 import levels.levelManager;
 
 import java.awt.Graphics;
+import gamestates.*;
 
 public class Game implements Runnable {
     private Window window;
     private GamePanel gamePanel;
     private Thread gameThread;
-    private Player player;
-    private levelManager levelmanager;
+    
 
     private final int FPS_SETTINGS = 120;
     private final int UPS_SETTINGS = 200;
+
+    private Playing playing;
+    private Menu menu;
 
 
     public final static int TILES_DEFAULT_SIZE = 32;
@@ -36,28 +40,44 @@ public class Game implements Runnable {
         startGameLoop();
      
     }
-
     private void initClasses(){
-
-        levelmanager = new levelManager(this);
-        player = new Player (200, 200 , (int) (64*GAME_SCALE) ,(int) (40*GAME_SCALE));
-        player.loadLevelData(levelmanager.getCurrentLevel().GetLevelData());
-
+        menu = new Menu(this);
+        playing = new Playing(this);
     }
 
+    
     public void startGameLoop(){
         gameThread = new Thread(this);
         gameThread.start();
     }
 
     public void update(){
-        levelmanager.update();
-         player.update();
+        switch ( gameStates.state) {
+            case MENU:
+                menu.update();
+                break;
+            case PLAYING :
+           playing.update();
+        
+            default:
+                break;
+        }
+        
          
     }
     public void draw( Graphics g ){
-        levelmanager.draw(g);
-        player.render(g);
+        switch ( gameStates.state) {
+            case MENU:
+                menu.draw(g);
+                break;
+            case PLAYING :
+                playing.draw(g);
+                break;
+        
+            default:
+                break;
+        }
+       
        
     }
 
@@ -109,7 +129,15 @@ public class Game implements Runnable {
             
         }
     }
-    public Player getPlayer(){
-        return player;
-    }
+    public void updateWindowFocus(){
+       if (gameStates.state == gameStates.PLAYING )
+         playing.getPlayer().resetDirection();
+       
+     }
+     public Playing getPlaying(){
+        return playing;
+     }
+     public Menu getMenu(){
+        return menu;
+     }
 }

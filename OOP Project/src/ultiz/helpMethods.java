@@ -38,8 +38,8 @@ public class helpMethods {
         if( xSpeed > 0 ){
         //right
         int tileXPos = currentTiles * TILES_SIZE;
-        int xDrawOffset = (int) (TILES_SIZE - hitBox.width);
-        return tileXPos +  xDrawOffset - 1;
+        int xOffset = (int) (TILES_SIZE - hitBox.width);
+        return tileXPos +  xOffset - 1;
         }
         else{
             //left
@@ -53,8 +53,8 @@ public class helpMethods {
         if(airSpeed >0){
             //falling 
             int tileYPos = currentTiles * TILES_SIZE;
-            int yDrawOffset = (int) (TILES_SIZE - hitBox.height);
-            return tileYPos + yDrawOffset - 1;
+            int yOffset = (int) (TILES_SIZE - hitBox.height);
+            return tileYPos + yOffset - 1;
         }
         else{
             //jumping
