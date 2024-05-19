@@ -1,6 +1,7 @@
 package ui;
 import java.awt.image.BufferedImage;
 
+import gamestates.gameStates;
 
 import java.awt.event.MouseEvent;
 
@@ -8,16 +9,32 @@ import main.Game;
 import ultiz.loadSave;
 import java.awt.Graphics;
 import static ultiz.Constant.UI.SoundButton.*;
-
+import static ultiz.Constant.UI.UrmButton.URM_SIZE;
+import gamestates.Playing;
 public class PauseOverlay {
 
     private BufferedImage pauseImgs;
     private int bgX , bgY , bgWidth , bgHeight;
     private SoundButton musicButton , sfxButton;
+    private UrmButton menuB , replayB , unpauseB;
+    private Playing playing;
 
-    public PauseOverlay(){
+    public PauseOverlay(Playing playing){
+        this.playing = playing;
         loadImgs();
         loadSoundbutton();
+        loadUrmButton();
+    }
+
+    private void loadUrmButton(){
+       int menuX = (int) (313 * Game.GAME_SCALE);
+       int replayX = (int) (388 * Game.GAME_SCALE);
+       int unpauseX = (int) (465 * Game.GAME_SCALE);
+       int urmY = (int) (300 * Game.GAME_SCALE);
+
+       menuB = new UrmButton(menuX, urmY, URM_SIZE, URM_SIZE, 2);
+       replayB = new UrmButton(replayX, urmY, URM_SIZE, URM_SIZE, 1);
+       unpauseB = new UrmButton(unpauseX, urmY, URM_SIZE, URM_SIZE, 0);
     }
 
     private void loadSoundbutton(){
@@ -40,6 +57,9 @@ public class PauseOverlay {
         
          musicButton.update();
          sfxButton.update();
+         menuB.update();
+         replayB.update();
+         unpauseB.update();
     }
     public void draw(Graphics g ){
      // background 
@@ -48,6 +68,11 @@ public class PauseOverlay {
        //sound button
        musicButton.draw(g);
        sfxButton.draw(g);
+
+       //urm buttons
+       menuB.draw(g);
+       replayB.draw(g);
+       unpauseB.draw(g);
     }
 
      
@@ -57,6 +82,15 @@ public class PauseOverlay {
            }
            else if (isIn(e, sfxButton)){
             sfxButton.setMousePressed(true);
+           }
+           else if (isIn(e, menuB)){
+            menuB.setMousePressed(true);
+           }
+           else if (isIn(e, replayB)){
+            replayB.setMousePressed(true);
+           }
+           else if (isIn(e, unpauseB)){
+            unpauseB.setMousePressed(true);
            }
     }
     
@@ -71,8 +105,29 @@ public class PauseOverlay {
                      sfxButton.setMuted(!sfxButton.isMuted());
                   }
            }
+           else if (isIn(e, menuB)){
+                  if(menuB.isMousePressed()){
+                     gameStates.state = gameStates.MENU;
+                  }
+           }
+           else if (isIn(e, replayB)){
+                  if(replayB.isMousePressed()){
+                    System.out.println("lvl replay !");
+            }
+           }
+           else if (isIn(e, unpauseB)){
+                   if(unpauseB.isMousePressed()){
+                      playing.unpauseGame();
+            }
+     }
+
+
+          
            musicButton.resetAllBools();
            sfxButton.resetAllBools();
+           menuB.reserAllBools();
+           replayB.reserAllBools();
+           unpauseB.reserAllBools();
      }
      
      public void mouseClicked(MouseEvent e){
@@ -82,6 +137,9 @@ public class PauseOverlay {
      public void mouseMoved(MouseEvent e){
         musicButton.setMouseOver(false);
         sfxButton.setMouseOver(false);
+        menuB.setMouseOver(false);
+        replayB.setMouseOver(false);
+        unpauseB.setMouseOver(false);
 
          if(isIn(e, musicButton)){
             musicButton.setMouseOver(true);
@@ -89,6 +147,15 @@ public class PauseOverlay {
          else if (isIn(e, sfxButton)){
             sfxButton.setMouseOver(true);
          }
+         else if (isIn(e, menuB)){
+            menuB.setMouseOver(true);
+           }
+         else if (isIn(e, replayB)){
+            replayB.setMouseOver(true);
+           }
+         else if (isIn(e, unpauseB)){
+            unpauseB.setMouseOver(true);
+           }
      }
 
      public void mouseDragged(MouseEvent e ){
