@@ -12,12 +12,15 @@ import java.awt.event.KeyEvent;
 import main.Game;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseListener;
+import ui.PauseOverlay;
 
 
 public class Playing extends State implements stateMethods {
 
     private Player player;
     private levelManager levelmanager;
+    private PauseOverlay pauseOverlay;
+    private boolean paused = true;
 
     public Playing(Game game){
         super(game);
@@ -30,6 +33,7 @@ public class Playing extends State implements stateMethods {
         levelmanager = new levelManager(game);
         player = new Player (200, 200 , (int) (64*GAME_SCALE) ,(int) (40*GAME_SCALE));
         player.loadLevelData(levelmanager.getCurrentLevel().GetLevelData());
+        pauseOverlay = new PauseOverlay();
 
     }
 
@@ -39,19 +43,25 @@ public class Playing extends State implements stateMethods {
     public void update(){
          levelmanager.update();
          player.update();
+         pauseOverlay.update();
     }
     @Override
     public void draw(Graphics g ){
         levelmanager.draw(g);
         player.render(g);
+        pauseOverlay.draw(g);
     }
     @Override 
     public void mousePressed(MouseEvent e){
-
+             if(paused){
+                pauseOverlay.mousePressed(e);
+             }
     }
     @Override 
      public void mouseReleased(MouseEvent e){
-
+        if(paused){
+            pauseOverlay.mouseReleased(e);
+        }
      }
      @Override 
      public void mouseClicked(MouseEvent e){
@@ -61,7 +71,9 @@ public class Playing extends State implements stateMethods {
      }
      @Override 
      public void mouseMoved(MouseEvent e){
-
+           if(paused){
+            pauseOverlay.mouseMoved(e);
+           }
      }
      @Override 
      public void keyPressed(KeyEvent e ){
@@ -78,6 +90,7 @@ public class Playing extends State implements stateMethods {
             case KeyEvent.VK_SPACE:
             player.setJump(true);
             break;
+            
             case KeyEvent.VK_BACK_SPACE:
             gameStates.state = gameStates.MENU;
             break;
@@ -99,6 +112,7 @@ public class Playing extends State implements stateMethods {
             case KeyEvent.VK_SPACE:
            player.setJump(false);
             break;
+           
         }
      }
 
