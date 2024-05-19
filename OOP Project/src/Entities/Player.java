@@ -41,7 +41,7 @@ public class Player extends Entity
     public Player (float x , float y , int width ,int height ){
         super( x, y, width, height);
         LoadImg();
-        initHitbox(x , y , 20*GAME_SCALE , 28  *GAME_SCALE);
+        initHitbox(x , y , (int) (20*GAME_SCALE) ,  (int) (27 *GAME_SCALE));
         
 
     }

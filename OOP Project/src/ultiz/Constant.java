@@ -1,6 +1,18 @@
 package ultiz;
 
+import main.Game;
+
 public class Constant {
+
+    public static class UI{
+        public static class MenuButton{
+            
+            public static final int B_WIDTH_DEFAULT = 140;
+            public static final int B_HEIGHT_DEFAULT = 56;
+            public static final int B_WIDTH = (int) (B_WIDTH_DEFAULT * Game.GAME_SCALE);
+            public static final int B_HEIGHT = (int) (B_HEIGHT_DEFAULT * Game.GAME_SCALE);
+        }
+    }
     public static class Direction {
       public static final int UP = 0;
       public static final int DOWN = 1;
