@@ -1,5 +1,6 @@
 package Entities;
 import java.awt.Graphics;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import java.io.IOException;
@@ -43,8 +44,10 @@ public class Player extends Entity
         LoadImg();
         initHitbox(x , y , (int) (20*GAME_SCALE) ,  (int) (27 *GAME_SCALE));
         
+        
 
     }
+   
 
     private void updateAniTick(){
         aniTick++;
@@ -97,7 +100,7 @@ private void setAnimations(){
 
  private void setPosition(){
       isMoving = false;
-      float xSpeed = 0 ;
+     
 
       if(jump){
 
@@ -105,9 +108,13 @@ private void setAnimations(){
       }
 
        
-      if (!left && !right && !inAir)
-       return;
+      if ( !inAir){
+          if((!left && !right) || (right && left)) {
+                return;
+          }
+      }
        
+      float xSpeed = 0 ;
      
 
       if (left )
@@ -183,14 +190,13 @@ private void setAnimations(){
       }
  }
 
-     public void render(Graphics g){
+     public void render(Graphics g , int lvlOffset){
          // drawHitbox(g);
-         g.drawImage(Animations[playerAction][aniIndex],(int)( hitBox.x  - xDrawOffset) ,(int) (hitBox.y - yDrawOffset),width , height, null);
+         g.drawImage(Animations[playerAction][aniIndex],(int)( hitBox.x  - xDrawOffset) - lvlOffset ,(int) (hitBox.y - yDrawOffset),width , height, null);
      }
 
      public void update(){
         setPosition();
-      //   updateHitbox();
         updateAniTick();
         setAnimations();
         
@@ -225,7 +231,7 @@ private void setAnimations(){
         left = false;
      }
 
-    
+  
 
      public void setAttacking( boolean attacking){
          this.attacking = attacking;

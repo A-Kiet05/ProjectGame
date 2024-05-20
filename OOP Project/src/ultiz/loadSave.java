@@ -14,13 +14,15 @@ public class loadSave {
 
     public static final String PLAYER_ATLAS = "/images/player_sprites.png";
     public static final String LEVEL_SPRITES = "/images/outside_sprites.png";
-    public static final String LEVEL_ONE = "/images/level_one_data.png";
+    // public static final String LEVEL_ONE = "/images/level_one_data.png";
+    public static final String LEVEL_ONE = "/images/level_one_data_long.png";
     public static final String MENU_BUTTON = "/images/button_atlas.png";
     public static final String MENU_BACKGROUND = "/images/menu_background.png";
     public static final String PAUSE_MENU = "/images/pause_menu.png";
     public static final String SOUND_BUTTON = "/images/sound_button.png";
     public static final String URM_BUTTON = "/images/urm_buttons.png";
     public static final String VOLUME_BUTTON = "/images/volume_buttons.png";
+    public static final String BACKGROUND_TREE = "/images/forest.png";
 
     public static BufferedImage GetSpritesAtlas(String fileName){
         BufferedImage img = null;
@@ -42,8 +44,9 @@ public class loadSave {
        return img;
     }
     public static int[][] GetLevelData(){
-        int[][] lvldata =  new int[Game.TILES_HEIGHT_DEFAULT][Game.TILES_WIDTH_DEFAULT];
         BufferedImage lvlImgs = loadSave.GetSpritesAtlas(LEVEL_ONE);
+        int[][] lvldata =  new int[lvlImgs.getHeight()][lvlImgs.getWidth()];
+       
         for (int j = 0 ; j < lvlImgs.getHeight() ; ++j){
             for (int i = 0 ; i < lvlImgs.getWidth() ; ++i){
              Color color = new Color(lvlImgs.getRGB(i, j));

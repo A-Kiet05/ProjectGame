@@ -5,22 +5,33 @@ import java.awt.event.MouseEvent;
 import Entities.Player;
 import levels.levelManager;
 
+import static main.Game.GAME_HEIGHT;
 import static main.Game.GAME_SCALE;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import main.Game;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseListener;
 import ui.PauseOverlay;
+import ultiz.loadSave;
 
 
 public class Playing extends State implements stateMethods {
 
     private Player player;
+   
     private levelManager levelmanager;
     private PauseOverlay pauseOverlay;
     private boolean paused = false;
+
+    private int xlvlOffset ;
+    private int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
+    private int rightBorder = (int) (0.8 * Game.GAME_WIDTH);
+    private int lvlTilesWidth = loadSave.GetLevelData()[0].length ;
+    private int maxTilesOffset = lvlTilesWidth -  Game.TILES_WIDTH_DEFAULT;
+    private int lvlMaxOffsetX = maxTilesOffset * Game.TILES_SIZE;
 
     public Playing(Game game){
         super(game);
@@ -43,8 +54,10 @@ public class Playing extends State implements stateMethods {
     public void update(){
 
         if(!paused){
+
          levelmanager.update();
          player.update();
+         checkClosetoBorder();
         }
 
          else{
@@ -53,11 +66,35 @@ public class Playing extends State implements stateMethods {
     }
     @Override
     public void draw(Graphics g ){
-        levelmanager.draw(g);
-        player.render(g);
+        levelmanager.draw(g , xlvlOffset);
+        player.render(g , xlvlOffset);
 
-        if(paused)
+        if(paused){
+        g.setColor(new Color(0,0,0,150));
+        g.fillRect(0,0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
         pauseOverlay.draw(g);
+        }
+    }
+
+    private void checkClosetoBorder(){
+        
+        int playerX = (int) player.getHitbox().x; 
+        int differ =playerX - xlvlOffset;
+
+        if(differ > rightBorder){
+            xlvlOffset += differ - rightBorder;
+        }
+        else if( differ < leftBorder){
+            xlvlOffset += differ - leftBorder;
+        }
+
+
+        if(xlvlOffset > lvlMaxOffsetX){
+            xlvlOffset = lvlMaxOffsetX;
+        }
+        else if (xlvlOffset < 0){
+            xlvlOffset =  0;
+        }
     }
     @Override 
     public void mousePressed(MouseEvent e){
@@ -71,7 +108,7 @@ public class Playing extends State implements stateMethods {
             pauseOverlay.mouseDragged(e);
           }
     }
-    
+
     @Override 
      public void mouseReleased(MouseEvent e){
         if(paused){
