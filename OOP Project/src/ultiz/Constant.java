@@ -5,6 +5,18 @@ import static main.Game.GAME_SCALE;
 import main.Game;
 
 public class Constant {
+    
+    public static class Environment{
+        public static final int BIG_CLOUDS_WIDTH_DEFAULT = 448;
+        public static final int BIG_CLOUDS_HEIGHT_DEFAULT = 101;
+        public static final int SMALL_CLOUDS_WIDTH_DEFAULT = 74;
+        public static final int SMALL_CLOUDS_HEIGHT_DEFAULT = 24;
+
+        public static final int BIG_CLOUDS_WIDTH = (int) (BIG_CLOUDS_WIDTH_DEFAULT * Game.GAME_SCALE);
+        public static final int BIG_CLOUDS_HEIGHT = (int) ( BIG_CLOUDS_HEIGHT_DEFAULT * Game.GAME_SCALE);
+        public static final int SMALL_CLOUDS_WIDTH = (int) ( SMALL_CLOUDS_WIDTH_DEFAULT * Game.GAME_SCALE);
+        public static final int SMALL_CLOUDS_HEIGHT = (int) ( SMALL_CLOUDS_HEIGHT_DEFAULT * Game.GAME_SCALE);
+    }
 
     public static class UI{
         public static class MenuButton{

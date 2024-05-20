@@ -13,9 +13,12 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import main.Game;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.util.Random;
 import java.awt.event.MouseListener;
 import ui.PauseOverlay;
 import ultiz.loadSave;
+import static ultiz.Constant.Environment.*;
 
 
 public class Playing extends State implements stateMethods {
@@ -33,9 +36,21 @@ public class Playing extends State implements stateMethods {
     private int maxTilesOffset = lvlTilesWidth -  Game.TILES_WIDTH_DEFAULT;
     private int lvlMaxOffsetX = maxTilesOffset * Game.TILES_SIZE;
 
+    private BufferedImage playing_bg , bigClouds, smallClouds;
+    private int[] smallCloudPos;
+    private Random random = new Random();
+
     public Playing(Game game){
         super(game);
         initClasses();
+
+        playing_bg = loadSave.GetSpritesAtlas(loadSave.PLAYING_BG);
+        bigClouds = loadSave.GetSpritesAtlas(loadSave.BIG_CLOUDS);
+        smallClouds = loadSave.GetSpritesAtlas(loadSave.SMALL_CLOUDS);
+        smallCloudPos = new int[8];
+        for(int i = 0 ; i <smallCloudPos.length ; ++i){
+            smallCloudPos[i] = (int) (90 *GAME_SCALE) + random.nextInt((int) (100 * GAME_SCALE));
+        }
     }
 
 
@@ -66,6 +81,9 @@ public class Playing extends State implements stateMethods {
     }
     @Override
     public void draw(Graphics g ){
+
+        g.drawImage(playing_bg, 0,  0 , Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+        drawClouds(g, xlvlOffset);
         levelmanager.draw(g , xlvlOffset);
         player.render(g , xlvlOffset);
 
@@ -74,6 +92,19 @@ public class Playing extends State implements stateMethods {
         g.fillRect(0,0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
         pauseOverlay.draw(g);
         }
+    }
+
+    private void drawClouds(Graphics g , int lvlOffset){
+
+        //big clouds
+         for (int i = 0 ; i < 3; ++i){
+             g.drawImage(bigClouds, (i * BIG_CLOUDS_WIDTH ) - (int) (lvlOffset * 0.3 ) , (int) (210 *GAME_SCALE), BIG_CLOUDS_WIDTH , BIG_CLOUDS_HEIGHT,null);
+         }
+
+         //small clouds
+         for(int i = 0 ; i < smallCloudPos.length ; ++i){
+            g.drawImage(smallClouds, (i* 4 *SMALL_CLOUDS_WIDTH) - (int) (lvlOffset * 0.8), smallCloudPos[i] , SMALL_CLOUDS_WIDTH , SMALL_CLOUDS_HEIGHT, null);
+         }
     }
 
     private void checkClosetoBorder(){
