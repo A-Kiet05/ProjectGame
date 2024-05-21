@@ -76,7 +76,7 @@ public class Playing extends State implements stateMethods {
          levelmanager.update();
          player.update();
          checkClosetoBorder();
-         enemyManager.update();
+         enemyManager.update(levelmanager.getCurrentLevel().GetLevelData());
         }
 
          else{
@@ -103,7 +103,7 @@ public class Playing extends State implements stateMethods {
 
         //big clouds
          for (int i = 0 ; i < 3; ++i){
-             g.drawImage(bigClouds, (i * BIG_CLOUDS_WIDTH ) - (int) (lvlOffset * 0.3 ) , (int) (210 *GAME_SCALE), BIG_CLOUDS_WIDTH , BIG_CLOUDS_HEIGHT,null);
+             g.drawImage(bigClouds, (i * BIG_CLOUDS_WIDTH ) - (int) (lvlOffset * 0.3 ) , (int) (220 *GAME_SCALE), BIG_CLOUDS_WIDTH , BIG_CLOUDS_HEIGHT,null);
          }
 
          //small clouds

@@ -191,8 +191,9 @@ private void setAnimations(){
  }
 
      public void render(Graphics g , int lvlOffset){
-         // drawHitbox(g);
+        
          g.drawImage(Animations[playerAction][aniIndex],(int)( hitBox.x  - xDrawOffset) - lvlOffset ,(int) (hitBox.y - yDrawOffset),width , height, null);
+        //  drawHitbox(g, lvlOffset);
      }
 
      public void update(){

@@ -3,6 +3,7 @@ package ultiz;
 import static main.Game.GAME_SCALE;
 
 import main.Game;
+import main.GamePanel;
 
 public class Constant {
 
@@ -20,6 +21,9 @@ public class Constant {
 
         public static final int CRAB_WIDTH = (int) (CRAB_WIDTH_DEFAULT * GAME_SCALE);
         public static final int CRAB_HEIGHT = (int) (CRAB_HEIGHT_DEFAULT * GAME_SCALE);
+
+        public static final int CRAB_DRAWOFFSETX = (int) (26 * GAME_SCALE);
+        public static final int CRAB_DRAWOFFSETY = (int) (9 * GAME_SCALE);
 
         public static int GetAmountSprites(int enemyType , int enemyState){
             switch(enemyType){
