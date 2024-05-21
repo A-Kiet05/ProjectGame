@@ -5,6 +5,47 @@ import static main.Game.GAME_SCALE;
 import main.Game;
 
 public class Constant {
+
+    public static class Enemy{
+        public static final int CRAB = 0;
+
+        public static final int IDLE = 0 ;
+        public static final int RUNNING = 1 ;
+        public static final int ATTACKING = 2 ;
+        public static final int HIT = 3 ;
+        public static final int DEAD = 4 ;
+
+        public static final int CRAB_WIDTH_DEFAULT = 72;
+        public static final int CRAB_HEIGHT_DEFAULT = 32;
+
+        public static final int CRAB_WIDTH = (int) (CRAB_WIDTH_DEFAULT * GAME_SCALE);
+        public static final int CRAB_HEIGHT = (int) (CRAB_HEIGHT_DEFAULT * GAME_SCALE);
+
+        public static int GetAmountSprites(int enemyType , int enemyState){
+            switch(enemyType){
+                case CRAB:
+                 switch (enemyState) {
+                    case IDLE:
+                        return 9;
+                        
+                    case RUNNING :
+                        return 6;
+                        
+                    case ATTACKING :
+                        return 7;
+                        
+                    case HIT :
+                        return 4;
+                    case DEAD :
+                        return 5;
+                 
+                    
+                 }
+                
+            }
+            return 0;
+        }
+    }
     
     public static class Environment{
         public static final int BIG_CLOUDS_WIDTH_DEFAULT = 448;

@@ -2,6 +2,7 @@ package gamestates;
 
 import java.awt.event.MouseEvent;
 
+import Entities.EnemyManager;
 import Entities.Player;
 import levels.levelManager;
 
@@ -26,6 +27,7 @@ public class Playing extends State implements stateMethods {
     private Player player;
    
     private levelManager levelmanager;
+    private EnemyManager enemyManager;
     private PauseOverlay pauseOverlay;
     private boolean paused = false;
 
@@ -60,6 +62,7 @@ public class Playing extends State implements stateMethods {
         player = new Player (200, 200 , (int) (64*GAME_SCALE) ,(int) (40*GAME_SCALE));
         player.loadLevelData(levelmanager.getCurrentLevel().GetLevelData());
         pauseOverlay = new PauseOverlay(this);
+        enemyManager = new EnemyManager(this);
 
     }
 
@@ -73,6 +76,7 @@ public class Playing extends State implements stateMethods {
          levelmanager.update();
          player.update();
          checkClosetoBorder();
+         enemyManager.update();
         }
 
          else{
@@ -86,6 +90,7 @@ public class Playing extends State implements stateMethods {
         drawClouds(g, xlvlOffset);
         levelmanager.draw(g , xlvlOffset);
         player.render(g , xlvlOffset);
+        enemyManager.draw(g , xlvlOffset);
 
         if(paused){
         g.setColor(new Color(0,0,0,150));
