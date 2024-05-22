@@ -27,7 +27,10 @@ public class helpMethods {
         float xIndex = x/TILES_SIZE;
         float yIndex = y/TILES_SIZE;
 
-        int value = lvldata[(int) yIndex ][(int) xIndex];
+      return IsTileSolid((int)xIndex , (int)yIndex , lvldata);
+    }
+    public static boolean IsTileSolid(int xTile , int yTile ,int[][] lvldata ){
+        int value = lvldata[ yTile ][xTile];
         if (value <0 || value >= 48 || value != 11){
             return true;
         }
@@ -71,5 +74,34 @@ public class helpMethods {
 
     public static boolean IsFloor(Rectangle2D.Float hitBox  , float xSpeed ,int[][] lvldata ){
         return IsSolid(hitBox.x + xSpeed, hitBox.y + hitBox.height + 1, lvldata);
+    }
+
+    public static boolean WalkableTiles(int starts , int ends , int y , int[][] lvldata){
+        for( int i = 0 ; i < (starts - ends); ++i){
+            if(IsTileSolid(ends +1, y, lvldata)){
+                return false;
+            }
+            if(!IsTileSolid(ends + 1, y + 1 , lvldata)){
+                return false;
+            }
+        }
+        
+        return true;
+       
+    }
+
+    public static boolean IsSightClear(int[][] lvldata ,Rectangle2D.Float firstHitbox , Rectangle2D.Float secondHitbox , int ytile ){
+        int firstTileX = (int) ( firstHitbox.x / Game.TILES_SIZE);
+        int secondTileX = (int) (secondHitbox.x / Game.TILES_SIZE);
+
+        if(firstTileX > secondTileX)
+           return WalkableTiles(firstTileX , secondTileX , ytile , lvldata);
+      
+        else
+           return WalkableTiles(secondTileX, firstTileX, ytile, lvldata);
+            
+        
+      
+    
     }
 }

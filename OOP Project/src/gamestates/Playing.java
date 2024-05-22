@@ -51,7 +51,7 @@ public class Playing extends State implements stateMethods {
         smallClouds = loadSave.GetSpritesAtlas(loadSave.SMALL_CLOUDS);
         smallCloudPos = new int[8];
         for(int i = 0 ; i <smallCloudPos.length ; ++i){
-            smallCloudPos[i] = (int) (90 *GAME_SCALE) + random.nextInt((int) (100 * GAME_SCALE));
+            smallCloudPos[i] = (int) (100 *GAME_SCALE) + random.nextInt((int) (100 * GAME_SCALE));
         }
     }
 
@@ -76,7 +76,7 @@ public class Playing extends State implements stateMethods {
          levelmanager.update();
          player.update();
          checkClosetoBorder();
-         enemyManager.update(levelmanager.getCurrentLevel().GetLevelData());
+         enemyManager.update(levelmanager.getCurrentLevel().GetLevelData() , player);
         }
 
          else{
