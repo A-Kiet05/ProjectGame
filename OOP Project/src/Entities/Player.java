@@ -1,4 +1,5 @@
 package Entities;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -39,13 +40,90 @@ public class Player extends Entity
    private float fallAfterCollision = 0.5f * GAME_SCALE;
    private boolean inAir = false ;
 
+   private BufferedImage statusBar;
+
+   //STATUS UI
+   private int statusWidth = (int)(192 *GAME_SCALE);
+   private int statusHeight = (int)(58 *GAME_SCALE);
+   private int statusX = (int)(10 *GAME_SCALE) ;
+   private int statusY = (int)(10 *GAME_SCALE);
+
+   // health bar
+   private int healthBarWidth =(int) (150 *GAME_SCALE);
+   private int healthBarHeight= (int)(4 *GAME_SCALE);
+   private int healthX = (int) (34 *GAME_SCALE);
+   private int healthY = (int) (14 *GAME_SCALE);
+
+   private int maxHealth = 100;
+   private int currentHealth = maxHealth;
+   private int healthWidth = healthBarWidth;
+
+
+   //attackBox
+   private Rectangle2D.Float attackBox;
+
     public Player (float x , float y , int width ,int height ){
         super( x, y, width, height);
         LoadImg();
         initHitbox(x , y , (int) (20*GAME_SCALE) ,  (int) (27 *GAME_SCALE));
+      
+        initAttackBox();
         
         
 
+    }
+
+   private void initAttackBox(){
+    attackBox = new Rectangle2D.Float(x , y, (int)(20*GAME_SCALE) , (int)(20*GAME_SCALE));
+   }
+
+
+    public void render(Graphics g , int lvlOffset){
+        
+      g.drawImage(Animations[playerAction][aniIndex],(int)( hitBox.x  - xDrawOffset) - lvlOffset ,(int) (hitBox.y - yDrawOffset),width , height, null);
+     //  drawHitbox(g, lvlOffset);
+     drawAttackBox(g , lvlOffset);
+      drawStatusBar(g);
+  }
+
+  private void drawAttackBox(Graphics g , int offsetLvl){
+    g.setColor(Color.red);
+    g.drawRect((int)attackBox.x - offsetLvl, (int)attackBox.y, (int)attackBox.width, (int)attackBox.height);
+  }
+
+  private void drawStatusBar(Graphics g ){
+       g.drawImage(statusBar, statusX, statusY,statusWidth , statusHeight ,  null);
+       g.setColor(Color.RED);
+       g.fillRect(healthX +statusX , healthY +statusY , healthWidth , healthBarHeight);
+      
+  }
+
+  public void update(){
+
+    updateHealth(); 
+    updateAttackBox();
+
+     setPosition();
+     updateAniTick();
+     setAnimations();
+     
+  }
+
+  private void updateAttackBox(){
+    if(left){
+      attackBox.x = hitBox.x - hitBox.width - (int)(10 * GAME_SCALE);
+    }else if(right){
+      attackBox.x = hitBox.x +hitBox.width +(int) (10*GAME_SCALE);
+    }
+
+  
+      attackBox.y = hitBox.y +(int) (10 *GAME_SCALE);
+   
+  }
+
+
+    private void updateHealth(){
+      int healthWidth = (int) ((currentHealth /(float) maxHealth) * healthBarWidth);
     }
    
 
@@ -190,20 +268,21 @@ private void setAnimations(){
       }
  }
 
-     public void render(Graphics g , int lvlOffset){
-        
-         g.drawImage(Animations[playerAction][aniIndex],(int)( hitBox.x  - xDrawOffset) - lvlOffset ,(int) (hitBox.y - yDrawOffset),width , height, null);
-        //  drawHitbox(g, lvlOffset);
-     }
+    
+     public void changeCurrentHealth(int value){
 
-     public void update(){
-        setPosition();
-        updateAniTick();
-        setAnimations();
-        
+      currentHealth += value;
+       if(currentHealth <= 0 ){
+        currentHealth = 0;
+
+      }
+       else if(currentHealth >= maxHealth){
+        currentHealth = maxHealth;
+       }
      }
 
      public void LoadImg(){
+      statusBar = loadSave.GetSpritesAtlas(loadSave.STATUS_BAR);
         
         BufferedImage img = loadSave.GetSpritesAtlas(loadSave.PLAYER_ATLAS);
 
