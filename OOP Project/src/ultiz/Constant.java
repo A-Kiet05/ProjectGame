@@ -2,6 +2,8 @@ package ultiz;
 
 import static main.Game.GAME_SCALE;
 
+import org.w3c.dom.html.HTMLIsIndexElement;
+
 import main.Game;
 import main.GamePanel;
 
@@ -48,6 +50,29 @@ public class Constant {
                 
             }
             return 0;
+        }
+
+        public static int getMaxHealth(int enemyType){
+            switch(enemyType){
+                case CRAB:
+                 return 10;
+                
+                default:
+                return 1;
+            }
+        }
+
+        public static int getDmgHealth(int enemyType){
+            switch(enemyType){
+
+                case CRAB:
+                  return -15;
+                  
+
+                default:
+                  return 0;
+
+            }
         }
     }
     
@@ -106,14 +131,13 @@ public class Constant {
         public static final int RUNNING = 1;
         public static final int JUMP = 2;
         public static final int FALLING = 3;
-        public static final int HURT = 4;
-        public static final int GROUND = 5;
+       
         
-        public static final int ATTACKING = 6;
-        public static final int JUMP_ATTACK_1 = 7;
-        public static final int JUMP_ATTACK_2 = 8 ;
-        public static final int BACKGROUND = 9;
-
+        
+        public static final int ATTACKING = 4;
+        public static final int HURT = 5;
+        public static final int DEAD = 6;
+        
     
         public static int GetAmountSprites( int player_action){
 
@@ -126,17 +150,19 @@ public class Constant {
                 case JUMP :
                     return 3;
                 case ATTACKING :
-                case JUMP_ATTACK_1:
-                case JUMP_ATTACK_2:
+                
                 return 3;
 
                 
-               case GROUND:
-                return 2;
+               case HURT:
+
+               
+                return 4;
+                case DEAD:
+                return 8;
                
                 
-               case HURT:
-               return 2;
+               
 
                case FALLING :
                default:

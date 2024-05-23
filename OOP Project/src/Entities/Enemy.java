@@ -5,6 +5,8 @@ import static main.Game.TILES_SIZE;
 import static ultiz.Constant.Enemy.*;
 import static ultiz.helpMethods.*;
 import java.awt.Graphics;
+import java.awt.geom.Rectangle2D;
+
 import static ultiz.Constant.Direction.*;
 
 abstract class Enemy extends Entity {
@@ -21,15 +23,50 @@ abstract class Enemy extends Entity {
     protected int tileY ;
     protected int attackSight = TILES_SIZE;
 
+    protected int currentHealth ; 
+    protected int maxHealth;
+
+    protected boolean active = true;
+    protected boolean attackChecked ;
+    
+    
+
     public Enemy(int x, int y, int width, int height, int enemyType) {
         super(x, y, width, height);
         this.enemyType = enemyType;
+        maxHealth = getMaxHealth(enemyType);
+        currentHealth = maxHealth;
+        
 
     }
 
+    protected void hurt(int value){
+        currentHealth -= value;
+        if(currentHealth <= 0){
+            newState(DEAD);
+        }else{
+            newState(HIT);
+        }
+    }
+    protected void checkPlayerGetHit(Rectangle2D.Float attackBox , Player player){
+          if(attackBox.intersects(player.hitBox))
+              player.changeCurrentHealth(getDmgHealth(enemyType));
+
+            attackChecked = true;
+          
+    }
 
     public void draw(Graphics g) {
 
+    }
+    protected void resetEnemy(){
+        hitBox.x = x;
+        hitBox.y = y;
+        active = true;
+        currentHealth = maxHealth;
+        newState(IDLE);
+        fallSpeed = 0 ;
+        firstUpdated = true;
     }
 
     protected void firstUpdateCheck(int[][] lvldata){
@@ -107,8 +144,14 @@ abstract class Enemy extends Entity {
             aniIndex++;
             if (aniIndex >= GetAmountSprites(enemyType, enemyState)) {
                 aniIndex = 0;
-                if(enemyState == ATTACKING){
-                    enemyState = IDLE;
+               
+                switch (enemyState) {
+                    case ATTACKING , HIT  -> enemyState=  IDLE;
+
+                    case DEAD -> active = false;   
+                       
+                
+                    
                 }
             }
         }
@@ -134,4 +177,11 @@ abstract class Enemy extends Entity {
     public int getAniIndex() {
         return aniIndex;
     }
+    public void setActive(boolean active){
+        this.active = active;
+    }
+    public boolean isActive(){
+        return active;
+    }
+    
 }
