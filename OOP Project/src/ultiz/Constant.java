@@ -9,6 +9,9 @@ import main.GamePanel;
 
 public class Constant {
 
+    public static final float GRAVITY = 0.04f * GAME_SCALE;
+    public static final int aniSpeed = 25;
+
     public static class Enemy{
         public static final int CRAB = 0;
 

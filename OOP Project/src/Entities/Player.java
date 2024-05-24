@@ -23,27 +23,30 @@ import ultiz.Constant.playerConstants;
 
 import static ultiz.Constant.playerConstants;
 import static ultiz.Constant.Enemy.ATTACKING;
+import static ultiz.Constant.Enemy.IDLE;
 import static main.Game.GAME_SCALE;
 import static main.Game.TILES_SIZE;
 import static ultiz.Constant.Direction;
+import static ultiz.Constant.GRAVITY;
+import static ultiz.Constant.aniSpeed;
 
 public class Player extends Entity
  {
     private BufferedImage[][] Animations;
-    private int aniIndex=0, aniTick=0 , aniSpeed = 25;
-    private int playerAction =playerConstants.IDLE;
+    
+    
     private int[][] lvldata;
    
    private boolean isMoving = false , attacking = false;
-   private float playerSpeed =  1.5f ;
+   
    private float xDrawOffset = 21 * GAME_SCALE;
    private float yDrawOffset = 4 * GAME_SCALE;
    private boolean left , right ,  jump;
-   private float airSpeed = 0f;
-   private float gravity = 0.04f * GAME_SCALE;
+   
+  
    private float jumpSpeed = -2.25f * GAME_SCALE;
    private float fallAfterCollision = 0.5f * GAME_SCALE;
-   private boolean inAir = false ;
+   
 
    private BufferedImage statusBar;
 
@@ -59,13 +62,12 @@ public class Player extends Entity
    private int healthX = (int) (34 *GAME_SCALE);
    private int healthY = (int) (14 *GAME_SCALE);
 
-   private int maxHealth = 100;
-   private int currentHealth = maxHealth;
+   
    private int healthWidth = healthBarWidth;
 
 
    //attackBox
-   private Rectangle2D.Float attackBox;
+   
    //flip the animation 
     private int flipX  ;
     private int flipW  ;
@@ -76,11 +78,15 @@ public class Player extends Entity
    
 
     public Player (float x , float y , int width ,int height, Playing playing){
+
         super( x, y, width, height);
         this.playing = playing;
+        this.state = IDLE;
+        this.walkSpeed = (1.5f *GAME_SCALE);
+        this.maxHealth = 100;
+        this.currentHealth = maxHealth;
         LoadImg();
-        initHitbox(x , y , (int) (20*GAME_SCALE) ,  (int) (27 *GAME_SCALE));
-      
+        initHitbox( (int) (20*GAME_SCALE) ,  (int) (27 *GAME_SCALE));
         initAttackBox();
         
         
@@ -106,16 +112,12 @@ public class Player extends Entity
 
     public void render(Graphics g , int lvlOffset){
         
-      g.drawImage(Animations[playerAction][aniIndex],(int)(( hitBox.x  - xDrawOffset) - lvlOffset + flipX) ,(int) (hitBox.y - yDrawOffset), width * flipW, height, null);
+      g.drawImage(Animations[state][aniIndex],(int)(( hitBox.x  - xDrawOffset) - lvlOffset + flipX) ,(int) (hitBox.y - yDrawOffset), width * flipW, height, null);
      //  drawHitbox(g, lvlOffset);
     //  drawAttackBox(g , lvlOffset);
       drawStatusBar(g);
   }
 
-  private void drawAttackBox(Graphics g , int offsetLvl){
-    g.setColor(Color.red);
-    g.drawRect((int)attackBox.x - offsetLvl , (int)attackBox.y , (int)attackBox.width , (int)attackBox.height);
-  }
   
 
 
@@ -170,7 +172,7 @@ public class Player extends Entity
         if(aniTick >= aniSpeed){
           aniTick = 0;
           aniIndex++;
-          if(aniIndex >= playerConstants.GetAmountSprites(playerAction)){
+          if(aniIndex >= playerConstants.GetAmountSprites(state)){
               aniIndex = 0 ;
               attacking = false;
               attackChecked = false;
@@ -183,26 +185,26 @@ public class Player extends Entity
  
   
 private void setAnimations(){
-    int startAnimation = playerAction;
+    int startAnimation =state;
     
     if(isMoving){
-        playerAction = playerConstants.RUNNING;
+      state = playerConstants.RUNNING;
     }
     
     else{
-        playerAction = playerConstants.IDLE;
+      state = playerConstants.IDLE;
     }
     
     
     if(inAir){
        if (airSpeed < 0 )
-           playerAction = playerConstants.JUMP;
+       state = playerConstants.JUMP;
        else
-           playerAction = playerConstants.FALLING;
+       state = playerConstants.FALLING;
     }
     
     if(attacking){
-        playerAction = playerConstants.ATTACKING;
+      state = playerConstants.ATTACKING;
         if(startAnimation != playerConstants.ATTACKING){
           aniIndex = 1;
           aniTick= 0;
@@ -212,7 +214,7 @@ private void setAnimations(){
     }
     
     
-    if ( startAnimation != playerAction){
+    if ( startAnimation !=  state){
         resetAnimation();
     }
 }
@@ -242,13 +244,13 @@ private void setAnimations(){
      
 
       if (left )
-        xSpeed -= playerSpeed;
+        xSpeed -= walkSpeed;
         flipX = width ;
         flipW = -1;
         
        
       if ( right)
-       xSpeed += playerSpeed;
+       xSpeed += walkSpeed;
        flipX = 0 ;
        flipW = 1;
       
@@ -266,8 +268,7 @@ private void setAnimations(){
        if(inAir){
          if(CanMoveHere( hitBox.x  , hitBox.y + airSpeed , hitBox.width, hitBox.height , lvldata)){
              hitBox.y += airSpeed;
-             airSpeed += gravity;
-            
+             airSpeed += GRAVITY;
              updateXPos(xSpeed);
             
            
@@ -393,7 +394,7 @@ private void setAnimations(){
       hitBox.y = y;
       resetDirection();
       currentHealth = maxHealth;
-      playerAction = playerConstants.IDLE;
+      state =IDLE;
 
         if(!IsEntityOnTheFloor(hitBox, lvldata))
             inAir = true ;

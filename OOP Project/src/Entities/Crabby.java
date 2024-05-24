@@ -11,13 +11,13 @@ import static ultiz.Constant.Direction.*;
 
 public class Crabby extends Enemy {
     
-    private Rectangle2D.Float attackBox;
+   
     private int attackBoxOffsetX;
 
 
     public Crabby(int x , int y ){
         super(x , y ,CRAB_WIDTH , CRAB_HEIGHT , CRAB);
-        initHitbox(x, y, (int) (22 * GAME_SCALE),(int) (19 *GAME_SCALE));
+        initHitbox( (int) (22 * GAME_SCALE),(int) (19 *GAME_SCALE));
         initAttackBox();
     }
 
@@ -48,7 +48,7 @@ public class Crabby extends Enemy {
         if (inAir) {
             inAirCheck(lvldata);
         } else {
-            switch (enemyState) {
+            switch (state) {
                 case IDLE:
                    newState(RUNNING);
                     break;
@@ -84,11 +84,7 @@ public class Crabby extends Enemy {
 
     }
 
-    public void drawAttackBoxEnemy(Graphics g, int lvlOffset){
-        g.setColor(Color.red);
-        g.drawRect((int)attackBox.x - lvlOffset, (int)attackBox.y ,(int) attackBox.width, (int)attackBox.height);
-
-    }
+   
 
     public int getFLipX(){
         if(walkDir == LEFT){

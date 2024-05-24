@@ -8,6 +8,14 @@ public abstract class Entity {
     protected float x , y ;
     protected int width , height;
     protected Rectangle2D.Float hitBox;
+    protected int aniIndex , aniTick;
+    protected int state ;
+    protected float airSpeed;
+    protected boolean inAir = false;
+    protected float walkSpeed;
+    protected   Rectangle2D.Float attackBox;
+    protected int maxHealth ;
+    protected int currentHealth ;
 
     public Entity(float x , float y , int width , int height){
         this.x = x;
@@ -22,7 +30,7 @@ public abstract class Entity {
         g.drawRect((int)hitBox.x - lvlOffset , (int)hitBox.y, (int)hitBox.width,(int) hitBox.height);
     }
 
-    protected void initHitbox(float x, float y , int width , int height){
+    protected void initHitbox( int width , int height){
         hitBox = new Rectangle2D.Float( x , y , width , height);
     }
 
@@ -31,7 +39,23 @@ public abstract class Entity {
     //     hitBox.y = (int) y ;
     // }
 
+    protected void drawAttackBox(Graphics g , int offsetLvl){
+        g.setColor(Color.red);
+        g.drawRect((int)attackBox.x - offsetLvl , (int)attackBox.y , (int)attackBox.width , (int)attackBox.height);
+      }
+      
+
     public Rectangle2D.Float getHitbox(){
         return hitBox;
     }
+
+    protected int getEnemyState() {
+        return state;
+    }
+    
+    protected int getAniIndex(){
+        return aniIndex;
+    }
+
+
 }
