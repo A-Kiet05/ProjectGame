@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import gamestates.Playing;
+import levels.level;
 import ultiz.loadSave;
 import static ultiz.Constant.Enemy.*;
 
@@ -17,20 +18,28 @@ public class EnemyManager {
     public EnemyManager(Playing playing){
       this.playing = playing;
       loadEnemyImgs();
-      getCrabbies();
+      
     }
 
-    private void getCrabbies(){
-        crabbies = loadSave.getCrabs();
-        System.out.println("the number of crabs :" + crabbies.size());
+    public  void getCrabbies(level levels){
+        crabbies = levels.getCrab();
+       
     }
 
     public void update(int[][] lvldata , Player player){
+        boolean isOnActive = false;
        for(Crabby c : crabbies){
+       
         if(c.isActive()){
           c.update(lvldata , player);
+           isOnActive = true;
         }
+        
        }
+
+       if(!isOnActive){
+        playing.setlvlCompleted(true);
+      }
     }
 
     public void draw(Graphics g , int lvlOffset ){

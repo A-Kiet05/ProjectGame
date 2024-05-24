@@ -1,6 +1,7 @@
 package Entities;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -84,6 +85,13 @@ public class Player extends Entity
         
         
 
+    }
+
+    public void setPlayerSqawn( Point sqawn){
+         this.x = sqawn.x;
+         this.y = sqawn.y;
+         hitBox.x = x;
+         hitBox.y = y;
     }
 
    private void initAttackBox(){

@@ -2,8 +2,15 @@ package ultiz;
 
 import main.Game;
 import static main.Game.*;
+import static ultiz.Constant.Enemy.CRAB;
 
+import java.awt.Color;
+import java.awt.Point;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import Entities.Crabby;
 
 public class helpMethods {
     private Game game;
@@ -73,7 +80,11 @@ public class helpMethods {
     }
 
     public static boolean IsFloor(Rectangle2D.Float hitBox  , float xSpeed ,int[][] lvldata ){
+        if(xSpeed > 0){
+            return  IsSolid(hitBox.x + hitBox.width+ xSpeed, hitBox.y + hitBox.height + 1, lvldata);
+        }else{
         return IsSolid(hitBox.x + xSpeed, hitBox.y + hitBox.height + 1, lvldata);
+        }
     }
 
     public static boolean WalkableTiles(int starts , int ends , int y , int[][] lvldata){
@@ -104,4 +115,56 @@ public class helpMethods {
       
     
     }
+
+    public static int[][] GetLevelDatas(BufferedImage lvlImgs){
+       
+        int[][] lvldata =  new int[lvlImgs.getHeight()][lvlImgs.getWidth()];
+       
+        for (int j = 0 ; j < lvlImgs.getHeight() ; ++j){
+            for (int i = 0 ; i < lvlImgs.getWidth() ; ++i){
+             Color color = new Color(lvlImgs.getRGB(i, j));
+             int value = color.getRed();
+             if (value >= 48){
+                value = 0 ;
+             }
+             lvldata[j][i] = value;
+        }
+    }
+      return lvldata;
+ }
+
+  public static ArrayList<Crabby> getCrabs (BufferedImage lvlImgs){
+     
+        ArrayList<Crabby> crabsList = new ArrayList<>();
+       
+       
+        for (int j = 0 ; j < lvlImgs.getHeight() ; ++j){
+            for (int i = 0 ; i < lvlImgs.getWidth() ; ++i){
+             Color color = new Color(lvlImgs.getRGB(i, j));
+             int value = color.getGreen();
+             if (value == CRAB){
+                 crabsList.add(new Crabby( i * TILES_SIZE, j*TILES_SIZE));
+             }
+             
+        }
+    }
+         return crabsList;
+
+    }
+
+    public static Point GetPlayerSqawn(BufferedImage imgs){
+        for (int j = 0 ; j < imgs.getHeight() ; ++j){
+            for (int i = 0 ; i < imgs.getWidth() ; ++i){
+             Color color = new Color(imgs.getRGB(i, j));
+             int value = color.getGreen();
+             if (value == 100){
+                return new Point(i * TILES_SIZE , j *TILES_SIZE);
+             }
+             
+        }
+    }
+    return new Point(1 * TILES_SIZE , 1 *TILES_SIZE);
+    }
+
+     
 }
