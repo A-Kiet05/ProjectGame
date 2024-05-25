@@ -39,6 +39,8 @@ public class loadSave {
     public static final String CRABBY = "/images/crabby_sprite.png";
     public static final String STATUS_BAR = "/images/health_power_bar.png";
     public static final String COMPLETED_SPRITE = "/images/completed_sprite.png";
+    public static final String POTION = "/images/potions_sprites.png";
+    public static final String CONTAINER = "/images/objects_sprites.png";
 
     public static BufferedImage GetSpritesAtlas(String fileName){
         BufferedImage img = null;
@@ -62,13 +64,14 @@ public class loadSave {
 
     public static BufferedImage[] GetAllLevels(){
         URL url = loadSave.class.getResource("/lvls");
-        File file = null;
+        File file  = null;
 
        try {
           file = new File(url.toURI());
        } catch (URISyntaxException e) {
            e.printStackTrace();
        }
+       
        File[] files = file.listFiles();
        File[] fileSorted = new File[files.length];
        for(int i = 0 ; i < fileSorted.length ; ++i){

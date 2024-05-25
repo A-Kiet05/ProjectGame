@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 
 import Entities.EnemyManager;
 import Entities.Player;
+import gameObject.ObjectManager;
 import levels.levelManager;
 
 import static main.Game.GAME_HEIGHT;
@@ -36,6 +37,7 @@ public class Playing extends State implements stateMethods {
     private PauseOverlay pauseOverlay;
     private GameOverlay gameOverlay;
     private CompletedOverlay completedOverlay ;
+    private ObjectManager objectManager ;
 
     private boolean paused = false;
     private boolean gameOver = false;
@@ -81,6 +83,7 @@ public class Playing extends State implements stateMethods {
         enemyManager = new EnemyManager(this);
         gameOverlay = new GameOverlay(this);
         completedOverlay = new CompletedOverlay(this);
+        // objectManager = new ObjectManager(this);
 
     }
 
@@ -108,9 +111,11 @@ public class Playing extends State implements stateMethods {
         }
         else if(!gameOver){
             levelmanager.update();
+            objectManager.update();
             player.update();
             checkClosetoBorder();
             enemyManager.update(levelmanager.getCurrentLevel().GetLevelData() , player);
+            
         }
 
         
@@ -123,6 +128,7 @@ public class Playing extends State implements stateMethods {
         levelmanager.draw(g , xlvlOffset);
         player.render(g , xlvlOffset);
         enemyManager.draw(g , xlvlOffset);
+        objectManager.draw(g, xlvlOffset);
 
         if(paused){
         g.setColor(new Color(0,0,0,150));

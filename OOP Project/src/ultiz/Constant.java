@@ -1,6 +1,7 @@
 package ultiz;
 
 import static main.Game.GAME_SCALE;
+import static main.Game.GAME_WIDTH;
 
 import org.w3c.dom.html.HTMLIsIndexElement;
 
@@ -11,6 +12,38 @@ public class Constant {
 
     public static final float GRAVITY = 0.04f * GAME_SCALE;
     public static final int aniSpeed = 25;
+
+    public static class ObjectConstants{
+        public static final int RED_POTION = 0;
+        public static final int BLUE_POTION = 1;
+        public static final int BARREL = 2;
+        public static final int BOX = 3;
+
+        public static final int RED_POTION_VALUE = 15;
+        public static final int BLUE_POTION_VALUE = 10;
+        
+        public static final int CONTAINER_WIDTH_DEFAULT = 30;
+        public static final int CONTAINER_HEIGHT_DEFAULT = 40;
+        public static final int CONTAINER_HEIGHT = (int) (CONTAINER_HEIGHT_DEFAULT * GAME_SCALE);
+        public static final int CONTAINER_WIDTH = (int) (CONTAINER_WIDTH_DEFAULT * GAME_SCALE);
+
+        public static final int POTION_WIDTH_DEFAULT = 12;
+        public static final int POTION_HEIGHT_DEFAULT = 16;
+        public static final int POTION_WIDTH = (int) (POTION_WIDTH_DEFAULT * GAME_SCALE);
+        public static final int POTION_HEIGHT =(int) (POTION_HEIGHT_DEFAULT * GAME_SCALE);
+
+        public static int GetAmountSprites(int objType){
+            switch (objType) {
+                case BLUE_POTION , RED_POTION:
+                    return 7;
+                case BARREL , BOX:
+                    return 8;
+            }
+            return 0;
+        }
+        
+        
+    }
 
     public static class Enemy{
         public static final int CRAB = 0;
