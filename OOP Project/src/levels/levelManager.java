@@ -36,6 +36,7 @@ public class levelManager {
         game.getPlaying().getEnemyManager().getCrabbies(newLevel);
         game.getPlaying().getPlayer().loadLevelData(newLevel.GetLevelData());
         game.getPlaying().setLvlOffset(newLevel.getlvlOffset());
+        game.getPlaying().getObjectManager().loadObjects(newLevel);
     }
 
     private void createAllLevels(){

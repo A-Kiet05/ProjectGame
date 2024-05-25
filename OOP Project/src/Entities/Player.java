@@ -82,15 +82,19 @@ public class Player extends Entity
         super( x, y, width, height);
         this.playing = playing;
         this.state = IDLE;
-        this.walkSpeed = (1.5f *GAME_SCALE);
+        this.walkSpeed = (1.05f *GAME_SCALE);
         this.maxHealth = 100;
-        this.currentHealth = maxHealth;
+        this.currentHealth = 65;
         LoadImg();
         initHitbox( (int) (20*GAME_SCALE) ,  (int) (27 *GAME_SCALE));
         initAttackBox();
         
         
 
+    }
+
+    public void changeEnergy(int value){
+       System.out.println("energy!!");
     }
 
     public void setPlayerSqawn( Point sqawn){
@@ -139,11 +143,18 @@ public class Player extends Entity
     updateAttackBox();
 
      setPosition();
+     if(isMoving){
+       checkPotionsTouched();
+     }
      if(attacking)
        checkAttackHit();
      updateAniTick();
      setAnimations();
      
+  }
+
+  public void checkPotionsTouched(){
+    playing.checkPotionsTouched(hitBox);
   }
   private void checkAttackHit(){
      if(attackChecked || aniIndex != 1){
@@ -151,6 +162,7 @@ public class Player extends Entity
      }
      attackChecked = true;
      playing.checkEnemyGetHit(attackBox);
+     playing.checkObjectGetHit(attackBox);
   }
 
   private void updateAttackBox(){

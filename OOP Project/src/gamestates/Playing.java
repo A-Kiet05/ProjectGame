@@ -83,8 +83,17 @@ public class Playing extends State implements stateMethods {
         enemyManager = new EnemyManager(this);
         gameOverlay = new GameOverlay(this);
         completedOverlay = new CompletedOverlay(this);
-        // objectManager = new ObjectManager(this);
+        objectManager = new ObjectManager(this);
 
+    }
+
+    public void checkPotionsTouched(Rectangle2D.Float hitBox){
+        objectManager.checkObjectTouched(hitBox);
+        
+    }
+
+    public void checkObjectGetHit(Rectangle2D.Float attackBox){
+        objectManager.checkObjectGetHit(attackBox);
     }
 
     private void calculatingLvlOffset(){
@@ -93,6 +102,7 @@ public class Playing extends State implements stateMethods {
 
     private void loadStartLevel(){
         enemyManager.getCrabbies(levelmanager.getCurrentLevel());
+        objectManager.loadObjects(levelmanager.getCurrentLevel());
     }
     public void loadNextLevel(){
         resetAll();
@@ -155,6 +165,8 @@ public class Playing extends State implements stateMethods {
             g.drawImage(smallClouds, (i* 4 *SMALL_CLOUDS_WIDTH) - (int) (lvlOffset * 0.8), smallCloudPos[i] , SMALL_CLOUDS_WIDTH , SMALL_CLOUDS_HEIGHT, null);
          }
     }
+
+
 
     private void checkClosetoBorder(){
         
@@ -295,6 +307,7 @@ public class Playing extends State implements stateMethods {
           lvlCompleted = false;
           enemyManager.resetAllEnemies();
           player.resetAll();
+          objectManager.resetAllObject();
      }
 
      public void checkEnemyGetHit(Rectangle2D.Float attackBox){
@@ -310,6 +323,10 @@ public class Playing extends State implements stateMethods {
 
      public void setlvlCompleted(boolean lvlCompleted){
         this.lvlCompleted = lvlCompleted;
+     }
+
+     public ObjectManager getObjectManager(){
+        return objectManager;
      }
 
 }

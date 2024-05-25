@@ -3,6 +3,10 @@ package ultiz;
 import main.Game;
 import static main.Game.*;
 import static ultiz.Constant.Enemy.CRAB;
+import static ultiz.Constant.ObjectConstants.BARREL;
+import static ultiz.Constant.ObjectConstants.BLUE_POTION;
+import static ultiz.Constant.ObjectConstants.BOX;
+import static ultiz.Constant.ObjectConstants.RED_POTION;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -11,6 +15,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import Entities.Crabby;
+import gameObject.Container;
+import gameObject.Potion;
 
 public class helpMethods {
     private Game game;
@@ -149,6 +155,46 @@ public class helpMethods {
         }
     }
          return crabsList;
+
+    }
+
+
+    public static ArrayList<Potion> getPotions (BufferedImage lvlImgs){
+     
+        ArrayList<Potion> potionsList = new ArrayList<>();
+       
+       
+        for (int j = 0 ; j < lvlImgs.getHeight() ; ++j){
+            for (int i = 0 ; i < lvlImgs.getWidth() ; ++i){
+             Color color = new Color(lvlImgs.getRGB(i, j));
+             int value = color.getBlue();
+             if (value == RED_POTION || value == BLUE_POTION){
+                potionsList.add(new Potion( i * TILES_SIZE, j *TILES_SIZE, value));
+             }
+             
+        }
+    }
+         return potionsList;
+
+    }
+
+    public static ArrayList<Container> getContainers (BufferedImage lvlImgs){
+     
+        ArrayList<Container> containerList = new ArrayList<>();
+       
+       
+        for (int j = 0 ; j < lvlImgs.getHeight() ; ++j){
+            for (int i = 0 ; i < lvlImgs.getWidth() ; ++i){
+             Color color = new Color(lvlImgs.getRGB(i, j));
+             int value = color.getBlue();
+             if (value == BOX || value == BARREL){
+                containerList.add(new Container(i * TILES_SIZE, j *TILES_SIZE, value));
+             }
+
+             
+        }
+    }
+         return containerList;
 
     }
 

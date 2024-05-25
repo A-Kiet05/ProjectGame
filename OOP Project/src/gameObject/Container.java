@@ -23,6 +23,10 @@ public class Container extends GameObject{
              yDrawOffset = (int) (5 *GAME_SCALE);
 
         }
+
+        hitBox.y += yDrawOffset + (int) (2 *GAME_SCALE);
+        // height of the container is 30 height and TILES_SIZE is 32x32 , so +2 is perfect
+        hitBox.x += xDrawOffset/2;
     }
 
     public void update(){

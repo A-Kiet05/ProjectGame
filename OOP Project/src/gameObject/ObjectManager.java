@@ -12,11 +12,13 @@ import static ultiz.Constant.ObjectConstants.POTION_HEIGHT_DEFAULT;
 import static ultiz.Constant.ObjectConstants.POTION_WIDTH;
 import static ultiz.Constant.ObjectConstants.POTION_WIDTH_DEFAULT;
 import static ultiz.Constant.ObjectConstants.RED_POTION;
+import static ultiz.Constant.ObjectConstants.RED_POTION_VALUE;
 
 import java.awt.Graphics;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
+import levels.level;
 import gamestates.Playing;
 import ultiz.loadSave;
 
@@ -32,12 +34,55 @@ public class ObjectManager {
         potions = new ArrayList<>();
         containers = new ArrayList<>();
 
-        potions.add(new Potion(100, 70, RED_POTION));
-        potions.add(new Potion(110, 70, BLUE_POTION));
+        potions.add(new Potion(300, 300, RED_POTION));
+        potions.add(new Potion(400, 300, BLUE_POTION));
 
-        containers.add(new Container(120, 70, BOX));
-        containers.add(new Container(130, 70, BARREL));
+        containers.add(new Container(500, 300, BOX));
+        containers.add(new Container(600, 300, BARREL));
 
+    }
+
+    public void checkObjectTouched(Rectangle2D.Float hitBox){
+         for(Potion p :potions){
+            if(p.isActive()){
+                if(hitBox.intersects(p.gethitBox())){
+                     p.setActive(false);
+                     applyEffectPlayer(p);
+                }
+            }
+         }
+    }
+
+    public void applyEffectPlayer(Potion p){
+        if(p.getObjectType() == BLUE_POTION){
+            playing.getPlayer().changeEnergy(BLUE_POTION);
+        }
+        else if(p.getObjectType() == RED_POTION){
+            playing.getPlayer().changeCurrentHealth(RED_POTION_VALUE);
+        }
+
+    }
+
+    public void checkObjectGetHit(Rectangle2D.Float attackBox){
+       for(Container c : containers){
+          if(c.isActive()){
+             if(c.gethitBox().intersects(attackBox)){
+                 c.setAnimation(true);
+                 int type = 0 ;
+                  if(c.getObjectType() == BARREL){
+                     type = 1;
+                     potions.add(new Potion((int)(c.gethitBox().x /2),(int) (c.gethitBox().y), type));
+                     
+                     return;
+                  }
+             }
+          }
+       }
+    }
+
+    public void loadObjects(level newLevel){
+        potions = newLevel.getPotions();
+        containers = newLevel.getContainers();
     }
 
     private void initImgs(){
@@ -53,7 +98,7 @@ public class ObjectManager {
         containerImgs = new BufferedImage[2][8];
         for(int j = 0 ; j <containerImgs.length ; ++j){
             for(int i = 0 ; i < containerImgs[j].length ; ++i){
-                containerImgs[j][i] = img.getSubimage( i * CONTAINER_WIDTH_DEFAULT, j *CONTAINER_HEIGHT_DEFAULT, CONTAINER_WIDTH_DEFAULT, CONTAINER_HEIGHT_DEFAULT);
+                containerImgs[j][i] = img.getSubimage( i * CONTAINER_WIDTH_DEFAULT, j * CONTAINER_HEIGHT_DEFAULT, CONTAINER_WIDTH_DEFAULT, CONTAINER_HEIGHT_DEFAULT);
             }
         }
     }
@@ -72,6 +117,15 @@ public class ObjectManager {
         drawContainers(g , lvlOffset);
     }
 
+    public void resetAllObject(){
+        for(Potion p: potions){
+            p.resetAll();
+        }
+        for(Container c : containers){
+            c.resetAll();
+        }
+    }
+
     private void drawPotions(Graphics g , int lvlOffset){
         for(Potion p : potions){
             int typePotions = 0;
@@ -81,6 +135,9 @@ public class ObjectManager {
                    typePotions = 1;
                     g.drawImage(potionImgs[typePotions][p.getAniIndex()],(int) p.gethitBox().x - p.getXDrawOffset() - lvlOffset, (int) p.gethitBox().y - p.getYDrawOffset() ,POTION_WIDTH , POTION_HEIGHT, null);
 
+                 }
+                 else{
+                    g.drawImage(potionImgs[typePotions][p.getAniIndex()],(int) p.gethitBox().x - p.getXDrawOffset() - lvlOffset, (int) p.gethitBox().y - p.getYDrawOffset() ,POTION_WIDTH , POTION_HEIGHT, null);
                  }
              
              }
@@ -93,6 +150,9 @@ public class ObjectManager {
             if(c.isActive()){
                 if(c.getObjectType() == BARREL){
                     typeContainers = 1;
+                    g.drawImage(containerImgs[typeContainers][c.getAniIndex()], (int) c.gethitBox().x - c.getXDrawOffset() - lvlOffset, (int) c.gethitBox().y - c.getYDrawOffset(), CONTAINER_WIDTH, CONTAINER_HEIGHT, null);
+                }
+                else{
                     g.drawImage(containerImgs[typeContainers][c.getAniIndex()], (int) c.gethitBox().x - c.getXDrawOffset() - lvlOffset, (int) c.gethitBox().y - c.getYDrawOffset(), CONTAINER_WIDTH, CONTAINER_HEIGHT, null);
                 }
             }

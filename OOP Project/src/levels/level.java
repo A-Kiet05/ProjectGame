@@ -5,7 +5,10 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import Entities.Crabby;
+import gameObject.Container;
+import gameObject.Potion;
 import main.Game;
+import ultiz.helpMethods;
 
 import static main.Game.TILES_SIZE;
 import static main.Game.TILES_WIDTH_DEFAULT;
@@ -17,6 +20,8 @@ public class level {
     private int[][] lvldata;
     private BufferedImage imgs ;
     private ArrayList<Crabby> crabs;
+    private ArrayList<Potion> potions;
+    private ArrayList<Container> containers;
 
     private int lvlIndex = 0;
      private int lvlTilesWidth ;
@@ -29,8 +34,18 @@ public class level {
           this.imgs = imgs;
           initLevels();
           createEnemies();
+          createPotions();
+          createContainer();
           calculateLvlOffset(imgs);
           calculatePlayerSqawn();
+    }
+
+    private void createPotions(){
+        potions = helpMethods.getPotions(imgs);
+    }
+
+    private void createContainer(){
+        containers = helpMethods.getContainers(imgs);
     }
 
     private void calculatePlayerSqawn(){
@@ -70,6 +85,13 @@ public class level {
 
     public Point getPlayerSqawn(){
         return player;
+    }
+
+    public ArrayList<Potion> getPotions(){
+        return potions;
+    }
+    public ArrayList<Container> getContainers(){
+        return containers;
     }
     
 }

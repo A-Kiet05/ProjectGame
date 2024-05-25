@@ -52,10 +52,10 @@ public class GameObject {
     }
 
     public void resetAll(){
+        aniIndex = 0;
+        aniIndex = 0;
         active = true;
-        hitBox.x = x;
-        hitBox.y = y;
-
+        
 
        if(objType == BOX || objType == BARREL){
           doAnimation = false;
@@ -89,5 +89,8 @@ public class GameObject {
      }
      public int getYDrawOffset(){
         return yDrawOffset;
+     }
+     public void setAnimation(boolean doAnimation){
+        this.doAnimation = doAnimation;
      }
 }
