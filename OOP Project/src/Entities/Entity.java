@@ -16,6 +16,7 @@ public abstract class Entity {
     protected   Rectangle2D.Float attackBox;
     protected int maxHealth ;
     protected int currentHealth ;
+    protected boolean left , right ,  jump;
 
     public Entity(float x , float y , int width , int height){
         this.x = x;
@@ -38,6 +39,23 @@ public abstract class Entity {
     //     hitBox.x = (int) x;
     //     hitBox.y = (int) y ;
     // }
+
+    protected int getFlipX(){
+        if(left){
+            return width;
+        }else{
+            return 0;
+        }
+
+    }
+
+    protected int getFlipW(){
+        if(left){
+            return -1;
+        }else{
+            return 1;
+        }
+    }
 
     protected void drawAttackBox(Graphics g , int offsetLvl){
         g.setColor(Color.red);

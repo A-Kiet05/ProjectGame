@@ -42,6 +42,19 @@ public class ObjectManager {
 
     }
 
+    public void update(){
+        for( Potion p : potions){
+            if(p.isActive()){
+               p.update();
+            }
+        }
+        for(Container c : containers){
+          if(c.isActive()){
+            c.update();
+          }
+        }
+    }
+
     public void checkObjectTouched(Rectangle2D.Float hitBox){
          for(Potion p :potions){
             if(p.isActive()){
@@ -68,15 +81,17 @@ public class ObjectManager {
           if(c.isActive()){
              if(c.gethitBox().intersects(attackBox)){
                  c.setAnimation(true);
+                
                  int type = 0 ;
                   if(c.getObjectType() == BARREL){
                      type = 1;
-                     potions.add(new Potion((int)(c.gethitBox().x /2),(int) (c.gethitBox().y), type));
-                     
+                     potions.add(new Potion((int)(c.gethitBox().x + c.gethitBox().width /2),(int) (c.gethitBox().y + c.gethitBox().height/4), type));
                      return;
                   }
+                 
              }
           }
+
        }
     }
 
@@ -103,14 +118,7 @@ public class ObjectManager {
         }
     }
 
-    public void update(){
-        for( Potion p : potions){
-            p.update();
-        }
-        for(Container c : containers){
-            c.update();
-        }
-    }
+   
 
     public void draw(Graphics g , int lvlOffset){
         drawPotions(g , lvlOffset);

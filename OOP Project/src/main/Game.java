@@ -34,10 +34,10 @@ public class Game implements Runnable {
         initClasses();
         gamePanel = new GamePanel(this);
         window = new Window(gamePanel);
-
+        gamePanel.requestFocus();
         gamePanel.setFocusable(true);
         // this line to make GamePanel to pay attention to the interaction along the code
-        gamePanel.requestFocus();
+       
         startGameLoop();
      
     }
@@ -58,7 +58,8 @@ public class Game implements Runnable {
                 menu.update();
                 break;
             case PLAYING :
-           playing.update();
+               playing.update();
+               break;
         
             default:
                 break;

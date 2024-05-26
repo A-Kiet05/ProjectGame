@@ -41,7 +41,7 @@ public class Player extends Entity
    
    private float xDrawOffset = 21 * GAME_SCALE;
    private float yDrawOffset = 4 * GAME_SCALE;
-   private boolean left , right ,  jump;
+  
    
   
    private float jumpSpeed = -2.25f * GAME_SCALE;
@@ -69,8 +69,8 @@ public class Player extends Entity
    //attackBox
    
    //flip the animation 
-    private int flipX  ;
-    private int flipW  ;
+   
+   
     
     private Playing playing;
     private boolean attackChecked;
@@ -116,7 +116,8 @@ public class Player extends Entity
 
     public void render(Graphics g , int lvlOffset){
         
-      g.drawImage(Animations[state][aniIndex],(int)(( hitBox.x  - xDrawOffset) - lvlOffset + flipX) ,(int) (hitBox.y - yDrawOffset), width * flipW, height, null);
+      g.drawImage(Animations[state][aniIndex],(int)( hitBox.x  - xDrawOffset - lvlOffset + getFlipX()) ,(int) (hitBox.y - yDrawOffset),( width * getFlipW()) , height, null);
+      
      //  drawHitbox(g, lvlOffset);
     //  drawAttackBox(g , lvlOffset);
       drawStatusBar(g);
@@ -148,8 +149,8 @@ public class Player extends Entity
      }
      if(attacking)
        checkAttackHit();
-     updateAniTick();
-     setAnimations();
+       updateAniTick();
+       setAnimations();
      
   }
 
@@ -257,14 +258,12 @@ private void setAnimations(){
 
       if (left )
         xSpeed -= walkSpeed;
-        flipX = width ;
-        flipW = -1;
+        
         
        
       if ( right)
        xSpeed += walkSpeed;
-       flipX = 0 ;
-       flipW = 1;
+       
       
       
 

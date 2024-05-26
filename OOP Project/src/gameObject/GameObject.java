@@ -41,6 +41,7 @@ public class GameObject {
                 aniIndex = 0;
                 if(objType == BARREL || objType == BOX){
                     doAnimation = false;
+                    active = false;
                 }
 
             }
@@ -53,7 +54,7 @@ public class GameObject {
 
     public void resetAll(){
         aniIndex = 0;
-        aniIndex = 0;
+        aniTick = 0;
         active = true;
         
 

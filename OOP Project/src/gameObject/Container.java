@@ -31,7 +31,8 @@ public class Container extends GameObject{
 
     public void update(){
         if(doAnimation){
-        updateAnimationTick();
+          updateAnimationTick();
+          
         }
     }
     

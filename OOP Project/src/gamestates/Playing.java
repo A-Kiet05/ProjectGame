@@ -141,9 +141,9 @@ public class Playing extends State implements stateMethods {
         objectManager.draw(g, xlvlOffset);
 
         if(paused){
-        g.setColor(new Color(0,0,0,150));
-        g.fillRect(0,0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
-        pauseOverlay.draw(g);
+           g.setColor(new Color(0,0,0,150));
+           g.fillRect(0,0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
+           pauseOverlay.draw(g);
         }
         else if(gameOver){
             gameOverlay.draw(g);
