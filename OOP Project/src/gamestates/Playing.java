@@ -87,14 +87,7 @@ public class Playing extends State implements stateMethods {
 
     }
 
-    public void checkPotionsTouched(Rectangle2D.Float hitBox){
-        objectManager.checkObjectTouched(hitBox);
-        
-    }
-
-    public void checkObjectGetHit(Rectangle2D.Float attackBox){
-        objectManager.checkObjectGetHit(attackBox);
-    }
+   
 
     private void calculatingLvlOffset(){
         lvlMaxOffsetX = levelmanager.getCurrentLevel().getlvlOffset();
@@ -310,8 +303,21 @@ public class Playing extends State implements stateMethods {
           objectManager.resetAllObject();
      }
 
+     public void checkPotionsTouched(Rectangle2D.Float hitBox){
+        objectManager.checkObjectTouched(hitBox);
+        
+    }
+
+    public void checkObjectGetHit(Rectangle2D.Float attackBox){
+        objectManager.checkObjectGetHit(attackBox);
+    }
+
      public void checkEnemyGetHit(Rectangle2D.Float attackBox){
         enemyManager.checkEnemyGetHit(attackBox);
+     }
+
+     public void checkTrapsInteractive(Player p ){
+        objectManager.checkTrapsTouched(p);
      }
      public void setGameOver(boolean gameOver){
         this.gameOver = gameOver;
@@ -327,6 +333,9 @@ public class Playing extends State implements stateMethods {
 
      public ObjectManager getObjectManager(){
         return objectManager;
+     }
+     public levelManager getLevelManager(){
+        return levelmanager;
      }
 
 }

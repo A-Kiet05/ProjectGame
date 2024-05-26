@@ -13,32 +13,37 @@ import static ultiz.Constant.ObjectConstants.POTION_WIDTH;
 import static ultiz.Constant.ObjectConstants.POTION_WIDTH_DEFAULT;
 import static ultiz.Constant.ObjectConstants.RED_POTION;
 import static ultiz.Constant.ObjectConstants.RED_POTION_VALUE;
+import static ultiz.Constant.ObjectConstants.SPIKE_HEIGHT;
+import static ultiz.Constant.ObjectConstants.SPIKE_WIDTH;
 
 import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import Entities.Player;
 import levels.level;
 import gamestates.Playing;
 import ultiz.loadSave;
 
 public class ObjectManager {
     private Playing playing;
+    
     private BufferedImage[][] potionImgs ,containerImgs;
+    private BufferedImage spikeImgs;
     private ArrayList<Potion> potions;
     private ArrayList<Container> containers;
+    private ArrayList<Spike> spikes;
+
     public ObjectManager(Playing playing){
         this.playing = playing;
         initImgs();
 
         potions = new ArrayList<>();
         containers = new ArrayList<>();
+        spikes = new ArrayList<>();
 
-        potions.add(new Potion(300, 300, RED_POTION));
-        potions.add(new Potion(400, 300, BLUE_POTION));
-
-        containers.add(new Container(500, 300, BOX));
-        containers.add(new Container(600, 300, BARREL));
+      
 
     }
 
@@ -52,6 +57,14 @@ public class ObjectManager {
           if(c.isActive()){
             c.update();
           }
+        }
+    }
+
+    public void checkTrapsTouched(Player p){
+        for(Spike s : spikes){
+            if(s.gethitBox().intersects(p.getHitbox())){
+                p.hurt();
+            }
         }
     }
 
@@ -78,7 +91,7 @@ public class ObjectManager {
 
     public void checkObjectGetHit(Rectangle2D.Float attackBox){
        for(Container c : containers){
-          if(c.isActive()){
+          if(c.isActive() && !c.doAnimation){
              if(c.gethitBox().intersects(attackBox)){
                  c.setAnimation(true);
                 
@@ -96,8 +109,9 @@ public class ObjectManager {
     }
 
     public void loadObjects(level newLevel){
-        potions = newLevel.getPotions();
-        containers = newLevel.getContainers();
+        potions = new ArrayList<>(newLevel.getPotions());
+        containers = new ArrayList<>(newLevel.getContainers());
+        spikes = newLevel.getSpikes();
     }
 
     private void initImgs(){
@@ -116,6 +130,8 @@ public class ObjectManager {
                 containerImgs[j][i] = img.getSubimage( i * CONTAINER_WIDTH_DEFAULT, j * CONTAINER_HEIGHT_DEFAULT, CONTAINER_WIDTH_DEFAULT, CONTAINER_HEIGHT_DEFAULT);
             }
         }
+
+        spikeImgs = loadSave.GetSpritesAtlas(loadSave.TRAPS_ATLAS);
     }
 
    
@@ -123,9 +139,12 @@ public class ObjectManager {
     public void draw(Graphics g , int lvlOffset){
         drawPotions(g , lvlOffset);
         drawContainers(g , lvlOffset);
+        drawSpikes(g ,lvlOffset);
     }
 
     public void resetAllObject(){
+        loadObjects(playing.getLevelManager().getCurrentLevel());
+
         for(Potion p: potions){
             p.resetAll();
         }
@@ -164,6 +183,12 @@ public class ObjectManager {
                     g.drawImage(containerImgs[typeContainers][c.getAniIndex()], (int) c.gethitBox().x - c.getXDrawOffset() - lvlOffset, (int) c.gethitBox().y - c.getYDrawOffset(), CONTAINER_WIDTH, CONTAINER_HEIGHT, null);
                 }
             }
+        }
+    }
+
+    private void drawSpikes(Graphics g , int lvlOffset ){
+        for(Spike s : spikes){
+            g.drawImage(spikeImgs,(int)( s.gethitBox().x - lvlOffset),(int) (s.gethitBox().y - s.getYDrawOffset()),SPIKE_WIDTH , SPIKE_HEIGHT ,  null);
         }
     }
 }

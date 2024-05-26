@@ -111,6 +111,10 @@ public class Player extends Entity
    public void updateHealth(){
      healthWidth = (int) ((currentHealth /(float) maxHealth) * healthBarWidth);
   }
+
+  public void hurt(){
+     currentHealth = 0;
+  }
  
 
 
@@ -146,12 +150,17 @@ public class Player extends Entity
      setPosition();
      if(isMoving){
        checkPotionsTouched();
+       checkTrapsTouched();
      }
      if(attacking)
        checkAttackHit();
        updateAniTick();
        setAnimations();
      
+  }
+
+  private void checkTrapsTouched(){
+     playing.checkTrapsInteractive(this);
   }
 
   public void checkPotionsTouched(){

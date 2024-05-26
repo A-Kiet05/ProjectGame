@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import Entities.Crabby;
 import gameObject.Container;
 import gameObject.Potion;
+import gameObject.Spike;
 import main.Game;
 import ultiz.helpMethods;
 
@@ -16,18 +17,21 @@ import static ultiz.helpMethods.GetLevelDatas;
 import static ultiz.helpMethods.getCrabs;
 import static ultiz.helpMethods.GetPlayerSqawn;
 
+
 public class level {
     private int[][] lvldata;
     private BufferedImage imgs ;
     private ArrayList<Crabby> crabs;
     private ArrayList<Potion> potions;
     private ArrayList<Container> containers;
+    private ArrayList<Spike> spikes;
 
     private int lvlIndex = 0;
      private int lvlTilesWidth ;
     private int maxTilesOffset ;
     private int lvlMaxOffsetX ;
     private Point player;
+    
 
 
     public level(BufferedImage imgs){
@@ -36,8 +40,13 @@ public class level {
           createEnemies();
           createPotions();
           createContainer();
+          createSpikes();
           calculateLvlOffset(imgs);
           calculatePlayerSqawn();
+    }
+
+    private void createSpikes(){
+        spikes = helpMethods.getSpikes(imgs);
     }
 
     private void createPotions(){
@@ -92,6 +101,10 @@ public class level {
     }
     public ArrayList<Container> getContainers(){
         return containers;
+    }
+
+    public ArrayList<Spike> getSpikes(){
+        return spikes;
     }
     
 }

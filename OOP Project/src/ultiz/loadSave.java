@@ -41,6 +41,7 @@ public class loadSave {
     public static final String COMPLETED_SPRITE = "/images/completed_sprite.png";
     public static final String POTION = "/images/potions_sprites.png";
     public static final String CONTAINER = "/images/objects_sprites.png";
+    public static final String TRAPS_ATLAS = "/images/trap_atlas.png";
 
     public static BufferedImage GetSpritesAtlas(String fileName){
         BufferedImage img = null;

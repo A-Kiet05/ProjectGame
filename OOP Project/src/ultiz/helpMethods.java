@@ -7,6 +7,7 @@ import static ultiz.Constant.ObjectConstants.BARREL;
 import static ultiz.Constant.ObjectConstants.BLUE_POTION;
 import static ultiz.Constant.ObjectConstants.BOX;
 import static ultiz.Constant.ObjectConstants.RED_POTION;
+import static ultiz.Constant.ObjectConstants.SPIKE;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import Entities.Crabby;
 import gameObject.Container;
 import gameObject.Potion;
+import gameObject.Spike;
 
 public class helpMethods {
     private Game game;
@@ -195,6 +197,26 @@ public class helpMethods {
         }
     }
          return containerList;
+
+    }
+
+    public static ArrayList<Spike> getSpikes (BufferedImage lvlImgs){
+     
+        ArrayList<Spike> spikeList = new ArrayList<>();
+       
+       
+        for (int j = 0 ; j < lvlImgs.getHeight() ; ++j){
+            for (int i = 0 ; i < lvlImgs.getWidth() ; ++i){
+             Color color = new Color(lvlImgs.getRGB(i, j));
+             int value = color.getBlue();
+             if (value == SPIKE){
+                 spikeList.add(new Spike (i * TILES_SIZE, j *TILES_SIZE, SPIKE));
+             }
+
+             
+        }
+    }
+         return spikeList;
 
     }
 
