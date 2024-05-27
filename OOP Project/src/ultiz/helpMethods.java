@@ -21,6 +21,7 @@ import Entities.Crabby;
 import gameObject.Cannon;
 import gameObject.Container;
 import gameObject.Potion;
+import gameObject.Projectiles;
 import gameObject.Spike;
 
 public class helpMethods {
@@ -129,6 +130,10 @@ public class helpMethods {
         
 
 
+    }
+
+    public static boolean CannonBallCollisingToSolid(int[][] lvldata, Projectiles pro){
+        return IsSolid(pro.getHitBox().x + pro.getHitBox().width/2, pro.getHitBox().y + pro.getHitBox().height/2, lvldata);
     }
 
     public static boolean IsSightClear(int[][] lvldata ,Rectangle2D.Float firstHitbox , Rectangle2D.Float secondHitbox , int ytile ){
