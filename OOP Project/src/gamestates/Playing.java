@@ -42,6 +42,7 @@ public class Playing extends State implements stateMethods {
     private boolean paused = false;
     private boolean gameOver = false;
     private boolean lvlCompleted = false;
+    private boolean playerDie = false;
 
     private int xlvlOffset ;
     private int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
@@ -112,7 +113,14 @@ public class Playing extends State implements stateMethods {
         else if(lvlCompleted){
             completedOverlay.update();
         }
-        else if(!gameOver){
+        else if(gameOver){
+            gameOverlay.update();
+        }
+        else if(playerDie){
+           player.update();
+        }
+        
+        else {
             levelmanager.update();
             objectManager.update(levelmanager.getCurrentLevel().GetLevelData() , player);
             player.update();
@@ -191,6 +199,9 @@ public class Playing extends State implements stateMethods {
                 completedOverlay.mousePressed(e);
              }
         }
+        else
+            gameOverlay.mousePressed(e);
+        
     }
 
     public void mouseDragged(MouseEvent e){
@@ -211,6 +222,9 @@ public class Playing extends State implements stateMethods {
             completedOverlay.mouseReleased(e);
          }
       }
+       else
+            gameOverlay.mouseReleased(e);
+      
     }
      @Override 
      public void mouseClicked(MouseEvent e){
@@ -231,6 +245,9 @@ public class Playing extends State implements stateMethods {
             completedOverlay.mouseMoved(e);
            }
         }
+        else
+            gameOverlay.mouseMoved(e);
+        
           
         
      }
@@ -299,6 +316,7 @@ public class Playing extends State implements stateMethods {
           gameOver = false;
           paused = false;
           lvlCompleted = false;
+          playerDie = false;
           enemyManager.resetAllEnemies();
           player.resetAll();
           objectManager.resetAllObject();
@@ -337,6 +355,10 @@ public class Playing extends State implements stateMethods {
      }
      public levelManager getLevelManager(){
         return levelmanager;
+     }
+
+     public void setPlayerDie(boolean playerDie){
+        this.playerDie = playerDie;
      }
 
 }

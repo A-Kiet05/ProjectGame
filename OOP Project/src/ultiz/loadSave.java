@@ -33,6 +33,7 @@ public class loadSave {
     public static final String TRAPS_ATLAS = "/images/trap_atlas.png";
     public static final String CANNON_ATLAS = "/images/cannon_atlas.png";
     public static final String CANNON_BALL = "/images/ball.png";
+    public static final String DEATH = "/images/death_screen.png";
 
     public static BufferedImage GetSpritesAtlas(String fileName){
         BufferedImage img = null;

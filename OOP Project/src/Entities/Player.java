@@ -17,6 +17,7 @@ import static ultiz.helpMethods.IsEntityOnTheFloor;
 
 
 import ultiz.loadSave;
+import static ultiz.Constant.aniSpeed;
 
 
 import static ultiz.Constant.playerConstants;
@@ -25,7 +26,7 @@ import static ultiz.Constant.Enemy.IDLE;
 import static main.Game.GAME_SCALE;
 import static main.Game.TILES_SIZE;
 import static ultiz.Constant.GRAVITY;
-import static ultiz.Constant.aniSpeed;
+
 
 public class Player extends Entity
  {
@@ -112,14 +113,6 @@ public class Player extends Entity
  
 
 
-    public void render(Graphics g , int lvlOffset){
-        
-      g.drawImage(Animations[state][aniIndex],(int)( hitBox.x  - xDrawOffset - lvlOffset + getFlipX()) ,(int) (hitBox.y - yDrawOffset),( width * getFlipW()) , height, null);
-      
-     //  drawHitbox(g, lvlOffset);
-      drawAttackBox(g , lvlOffset);
-      drawStatusBar(g);
-  }
 
   
 
@@ -135,11 +128,21 @@ public class Player extends Entity
 
     updateHealth(); 
     if(currentHealth <=0){
-      playing.setGameOver(true);
-      return;
+       if( state != playerConstants.DEAD){
+          state = playerConstants.DEAD; 
+          resetAnimation();
+          playing.setPlayerDie(true);
+
+       }else if (aniIndex == playerConstants.GetAmountSprites(playerConstants.DEAD) - 1 && aniTick >= aniSpeed - 1 ){
+          playing.setGameOver(true);
+       }
+       else
+          updateAniTick();
+       
+        return;
     }
 
-    updateAttackBox();
+     updateAttackBox();
 
      setPosition();
      if(isMoving){
@@ -153,6 +156,16 @@ public class Player extends Entity
        setAnimations();
      
   }
+
+  
+  public void render(Graphics g , int lvlOffset){
+        
+    g.drawImage(Animations[state][aniIndex],(int)( hitBox.x  - xDrawOffset - lvlOffset + getFlipX()) ,(int) (hitBox.y - yDrawOffset),( width * getFlipW()) , height, null);
+    
+   //  drawHitbox(g, lvlOffset);
+    // drawAttackBox(g , lvlOffset);
+    drawStatusBar(g);
+}
 
   private void checkTrapsTouched(){
      playing.checkTrapsInteractive(this);
