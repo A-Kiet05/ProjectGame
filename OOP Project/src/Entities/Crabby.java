@@ -1,12 +1,7 @@
 package Entities;
 import static main.Game.GAME_SCALE;
 import static ultiz.Constant.Enemy.*;
-import static ultiz.helpMethods.*;
-
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
-
 import static ultiz.Constant.Direction.*;
 
 public class Crabby extends Enemy {

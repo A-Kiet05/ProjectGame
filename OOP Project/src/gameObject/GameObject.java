@@ -2,7 +2,7 @@ package gameObject;
 import static main.Game.GAME_SCALE;
 import static ultiz.Constant.aniSpeed;
 
-import java.awt.Rectangle;
+
 import java.awt.geom.Rectangle2D;
 import static ultiz.Constant.ObjectConstants.*;
 import java.awt.Graphics;
@@ -43,6 +43,9 @@ public class GameObject {
                     doAnimation = false;
                     active = false;
                 }
+                else if(objType == CANNON_LEFT || objType == CANNON_RIGHT){
+                    doAnimation = false;
+                }
 
             }
         }
@@ -58,7 +61,7 @@ public class GameObject {
         active = true;
         
 
-       if(objType == BOX || objType == BARREL){
+       if(objType == BOX || objType == BARREL || objType == CANNON_RIGHT || objType == CANNON_LEFT){
           doAnimation = false;
        }else{
           doAnimation = true;

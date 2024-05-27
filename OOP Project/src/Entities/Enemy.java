@@ -39,7 +39,7 @@ abstract class Enemy extends Entity {
         this.enemyType = enemyType;
         maxHealth = getMaxHealth(enemyType);
         currentHealth = maxHealth;
-        walkSpeed =  (0.45f * GAME_SCALE);
+        walkSpeed =  (1.05f * GAME_SCALE);
         
 
     }

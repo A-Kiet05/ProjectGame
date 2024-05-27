@@ -5,10 +5,9 @@ import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
-import java.io.IOException;
-import java.io.InputStream;
+
 import static ultiz.helpMethods.GetXPosCollide;
-import javax.imageio.ImageIO;
+
 
 import gamestates.Playing;
 
@@ -16,17 +15,15 @@ import static ultiz.helpMethods.CanMoveHere;
 import static ultiz.helpMethods.GetYPosAtRoofOrFalling;
 import static ultiz.helpMethods.IsEntityOnTheFloor;
 
-import main.GamePanel;
+
 import ultiz.loadSave;
-import ultiz.Constant.Direction;
-import ultiz.Constant.playerConstants;
+
 
 import static ultiz.Constant.playerConstants;
-import static ultiz.Constant.Enemy.ATTACKING;
+
 import static ultiz.Constant.Enemy.IDLE;
 import static main.Game.GAME_SCALE;
 import static main.Game.TILES_SIZE;
-import static ultiz.Constant.Direction;
 import static ultiz.Constant.GRAVITY;
 import static ultiz.Constant.aniSpeed;
 
@@ -62,13 +59,10 @@ public class Player extends Entity
    private int healthX = (int) (34 *GAME_SCALE);
    private int healthY = (int) (14 *GAME_SCALE);
 
-   
    private int healthWidth = healthBarWidth;
 
 
-   //attackBox
-   
-   //flip the animation 
+   private int tileY;
    
    
     
@@ -123,7 +117,7 @@ public class Player extends Entity
       g.drawImage(Animations[state][aniIndex],(int)( hitBox.x  - xDrawOffset - lvlOffset + getFlipX()) ,(int) (hitBox.y - yDrawOffset),( width * getFlipW()) , height, null);
       
      //  drawHitbox(g, lvlOffset);
-    //  drawAttackBox(g , lvlOffset);
+      drawAttackBox(g , lvlOffset);
       drawStatusBar(g);
   }
 
@@ -151,6 +145,7 @@ public class Player extends Entity
      if(isMoving){
        checkPotionsTouched();
        checkTrapsTouched();
+       tileY = (int) (hitBox.y /TILES_SIZE);
      }
      if(attacking)
        checkAttackHit();
@@ -404,6 +399,9 @@ private void setAnimations(){
      }
      public void setJump(boolean jump){
       this.jump = jump;
+     }
+     public int getYtile(){
+      return tileY;
      }
 
      public void resetAll(){

@@ -1,7 +1,7 @@
 package gameObject;
 
 import static main.Game.GAME_SCALE;
-import static main.Game.TILES_SIZE;
+
 
 public class Spike extends GameObject {
     

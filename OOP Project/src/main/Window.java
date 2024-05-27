@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 public class Window extends JFrame {
 
     private JFrame jframe;
-    private GamePanel gamePanel;
+   
 
     public Window(GamePanel gamePanel){
         
@@ -23,7 +23,7 @@ public class Window extends JFrame {
         jframe.addWindowFocusListener( new WindowFocusListener() {
             @Override
             public void windowGainedFocus(WindowEvent e){
-               System.out.println("i am here");
+               
             }
 
             @Override

@@ -1,8 +1,7 @@
 package main;
-import Entities.*;
+
 import gamestates.gameStates;
-import levels.levelManager;
-import ultiz.loadSave;
+
 
 import java.awt.Graphics;
 import gamestates.*;

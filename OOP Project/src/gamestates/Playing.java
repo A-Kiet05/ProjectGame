@@ -7,19 +7,19 @@ import Entities.Player;
 import gameObject.ObjectManager;
 import levels.levelManager;
 
-import static main.Game.GAME_HEIGHT;
+
 import static main.Game.GAME_SCALE;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Rectangle;
+
 import java.awt.event.KeyEvent;
 import main.Game;
-import java.awt.event.MouseMotionListener;
+
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
-import java.awt.event.MouseListener;
+
 
 import ui.CompletedOverlay;
 import ui.GameOverlay;
@@ -114,7 +114,7 @@ public class Playing extends State implements stateMethods {
         }
         else if(!gameOver){
             levelmanager.update();
-            objectManager.update();
+            objectManager.update(levelmanager.getCurrentLevel().GetLevelData() , player);
             player.update();
             checkClosetoBorder();
             enemyManager.update(levelmanager.getCurrentLevel().GetLevelData() , player);
@@ -257,6 +257,7 @@ public class Playing extends State implements stateMethods {
             case KeyEvent.VK_ESCAPE:
              paused = !paused;
             break;
+
         }
     }
       

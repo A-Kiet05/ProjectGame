@@ -6,6 +6,8 @@ import static ultiz.Constant.Enemy.CRAB;
 import static ultiz.Constant.ObjectConstants.BARREL;
 import static ultiz.Constant.ObjectConstants.BLUE_POTION;
 import static ultiz.Constant.ObjectConstants.BOX;
+import static ultiz.Constant.ObjectConstants.CANNON_LEFT;
+import static ultiz.Constant.ObjectConstants.CANNON_RIGHT;
 import static ultiz.Constant.ObjectConstants.RED_POTION;
 import static ultiz.Constant.ObjectConstants.SPIKE;
 
@@ -16,12 +18,13 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import Entities.Crabby;
+import gameObject.Cannon;
 import gameObject.Container;
 import gameObject.Potion;
 import gameObject.Spike;
 
 public class helpMethods {
-    private Game game;
+  
 
 
     public static boolean CanMoveHere(float x , float y , float  width , float height , int[][] lvldata){
@@ -95,18 +98,37 @@ public class helpMethods {
         }
     }
 
+    public static boolean IsAllTilesClear(int starts , int ends , int y , int[][] lvldata){
+        for( int i = 0 ; i < (starts - ends); ++i)
+            if(IsTileSolid(ends +1, y, lvldata))
+                return false;  
+        return true;
+    }
+
     public static boolean WalkableTiles(int starts , int ends , int y , int[][] lvldata){
-        for( int i = 0 ; i < (starts - ends); ++i){
-            if(IsTileSolid(ends +1, y, lvldata)){
-                return false;
-            }
-            if(!IsTileSolid(ends + 1, y + 1 , lvldata)){
-                return false;
+        if(IsAllTilesClear(starts, ends, y, lvldata)){
+           for( int i = 0 ; i < (starts - ends); ++i){
+              if(!IsTileSolid(ends + 1, y + 1 , lvldata)){
+                  return false;
             }
         }
+      }
         
         return true;
        
+    }
+
+    public static boolean CheckCannonsCanShoot(int[][] lvldata ,Rectangle2D.Float firstHitbox , Rectangle2D.Float secondHitbox , int ytile){
+        int firstTileX = (int) ( firstHitbox.x / Game.TILES_SIZE);
+        int secondTileX = (int) (secondHitbox.x / Game.TILES_SIZE);
+
+        if(firstTileX > secondTileX)
+            return IsAllTilesClear(firstTileX, secondTileX, ytile, lvldata);
+        else
+            return IsAllTilesClear(secondTileX, firstTileX, ytile, lvldata);
+        
+
+
     }
 
     public static boolean IsSightClear(int[][] lvldata ,Rectangle2D.Float firstHitbox , Rectangle2D.Float secondHitbox , int ytile ){
@@ -210,13 +232,33 @@ public class helpMethods {
              Color color = new Color(lvlImgs.getRGB(i, j));
              int value = color.getBlue();
              if (value == SPIKE){
-                 spikeList.add(new Spike (i * TILES_SIZE, j *TILES_SIZE, SPIKE));
+                 spikeList.add(new Spike (i * TILES_SIZE, j *TILES_SIZE, value));
              }
 
              
         }
     }
          return spikeList;
+
+    }
+
+    public static ArrayList<Cannon> getCannons (BufferedImage lvlImgs){
+     
+        ArrayList<Cannon> cannonsList = new ArrayList<>();
+       
+       
+        for (int j = 0 ; j < lvlImgs.getHeight() ; ++j){
+            for (int i = 0 ; i < lvlImgs.getWidth() ; ++i){
+             Color color = new Color(lvlImgs.getRGB(i, j));
+             int value = color.getBlue();
+             if (value == CANNON_LEFT || value == CANNON_RIGHT ){
+                 cannonsList.add(new Cannon (i * TILES_SIZE, j * TILES_SIZE, value));
+             }
+
+             
+        }
+    }
+         return cannonsList;
 
     }
 

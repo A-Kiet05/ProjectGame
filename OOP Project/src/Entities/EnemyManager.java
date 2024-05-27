@@ -49,14 +49,14 @@ public class EnemyManager {
          for( Crabby c : crabbies){
             if(c.isActive()){
              g.drawImage(crabsImgs[c.getEnemyState()][c.getAniIndex()], (int) (c.getHitbox().x) - lvlOffset - CRAB_DRAWOFFSETX + c.getFLipX() ,(int) (c.getHitbox().y) - CRAB_DRAWOFFSETY, CRAB_WIDTH * c.getFlipW(), CRAB_HEIGHT, null);
-            //  c.drawAttackBoxEnemy(g, lvlOffset);
+             // c.drawAttackBoxEnemy(g, lvlOffset);
             }
          }
     }
 
     public void checkEnemyGetHit(Rectangle2D.Float attackBox){
         for(Crabby c: crabbies){
-            if(c.isActive()){
+            if(c.isActive() && !(c.getEnemyState() == DEAD)){
             if(attackBox.intersects(c.getHitbox())){
                 c.hurt(10);
                 return;

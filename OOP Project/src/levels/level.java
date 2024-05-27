@@ -5,10 +5,11 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import Entities.Crabby;
+import gameObject.Cannon;
 import gameObject.Container;
 import gameObject.Potion;
 import gameObject.Spike;
-import main.Game;
+
 import ultiz.helpMethods;
 
 import static main.Game.TILES_SIZE;
@@ -25,8 +26,9 @@ public class level {
     private ArrayList<Potion> potions;
     private ArrayList<Container> containers;
     private ArrayList<Spike> spikes;
+    private ArrayList<Cannon> cannons;
 
-    private int lvlIndex = 0;
+ 
      private int lvlTilesWidth ;
     private int maxTilesOffset ;
     private int lvlMaxOffsetX ;
@@ -41,8 +43,13 @@ public class level {
           createPotions();
           createContainer();
           createSpikes();
+          createCannons();
           calculateLvlOffset(imgs);
           calculatePlayerSqawn();
+    }
+
+    private void createCannons(){
+        cannons = helpMethods.getCannons(imgs);
     }
 
     private void createSpikes(){
@@ -99,12 +106,17 @@ public class level {
     public ArrayList<Potion> getPotions(){
         return potions;
     }
+    
     public ArrayList<Container> getContainers(){
         return containers;
     }
 
     public ArrayList<Spike> getSpikes(){
         return spikes;
+    }
+
+    public ArrayList<Cannon> getCannons(){
+        return cannons;
     }
     
 }
