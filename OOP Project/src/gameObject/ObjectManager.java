@@ -186,7 +186,7 @@ public class ObjectManager {
 
     public void applyEffectPlayer(Potion p){
         if(p.getObjectType() == BLUE_POTION){
-            playing.getPlayer().changeEnergy(BLUE_POTION);
+            playing.getPlayer().changePower(BLUE_POTION);
         }
         else if(p.getObjectType() == RED_POTION){
             playing.getPlayer().changeCurrentHealth(RED_POTION_VALUE);

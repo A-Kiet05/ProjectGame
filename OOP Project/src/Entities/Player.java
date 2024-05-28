@@ -10,12 +10,13 @@ import static ultiz.helpMethods.GetXPosCollide;
 
 
 import gamestates.Playing;
+import main.Game;
 
 import static ultiz.helpMethods.CanMoveHere;
 import static ultiz.helpMethods.GetYPosAtRoofOrFalling;
 import static ultiz.helpMethods.IsEntityOnTheFloor;
 
-
+import ultiz.Constant.playerConstants;
 import ultiz.loadSave;
 import static ultiz.Constant.aniSpeed;
 
@@ -61,6 +62,20 @@ public class Player extends Entity
    private int healthY = (int) (14 *GAME_SCALE);
 
    private int healthWidth = healthBarWidth;
+   //power bar
+   private int powerBarWidth= (int) (104 * GAME_SCALE);
+   private int powerBarHeight = (int) (2 * GAME_SCALE);
+   private int powerBarX = (int) (44 * GAME_SCALE);
+   private int powerBarY = (int) (34 * GAME_SCALE);
+
+   private int powerMaxValue =200;
+   private int powerCurrentValue = powerMaxValue;
+   private int powerWidth = powerBarWidth;
+
+   private boolean powerAttack;
+   private int powerAttackTick;
+   private int powerSpeedGrow = 15;
+   private int powerGrowTick;
 
 
    private int tileY;
@@ -88,9 +103,7 @@ public class Player extends Entity
 
     }
 
-    public void changeEnergy(int value){
-       System.out.println("energy!!");
-    }
+   
 
     public void setPlayerSqawn( Point sqawn){
          this.x = sqawn.x;
@@ -106,27 +119,60 @@ public class Player extends Entity
    public void updateHealth(){
      healthWidth = (int) ((currentHealth /(float) maxHealth) * healthBarWidth);
   }
+  public void updatePowerBar(){
+     powerWidth = (int) ((powerCurrentValue /(float) powerMaxValue) * powerBarWidth);
+
+     powerGrowTick++;
+     if(powerGrowTick >= powerSpeedGrow){
+        powerGrowTick = 0 ;
+        changePower(2);
+     }
+  }
 
   public void hurt(){
      currentHealth = 0;
   }
- 
+  public void changePower(int value){
+      powerCurrentValue += value;
+      if(powerCurrentValue >= powerMaxValue){
+         powerCurrentValue = powerMaxValue;
+      }else if(powerCurrentValue <= 0 ){
+         powerCurrentValue = 0 ;
+      }
+  }
 
+  public void changeCurrentHealth(int value){
 
+    currentHealth += value;
+     if(currentHealth <= 0 ){
+      currentHealth = 0;
 
-  
+    }
+     else if(currentHealth >= maxHealth){
+      currentHealth = maxHealth;
+     }
+   }
 
 
   private void drawStatusBar(Graphics g ){
+       //background status bar
        g.drawImage(statusBar, statusX, statusY,statusWidth , statusHeight ,  null);
+
+       //health bar
        g.setColor(Color.RED);
        g.fillRect(healthX +statusX , healthY +statusY , healthWidth , healthBarHeight);
+
+       //power bar
+       g.setColor(Color.BLUE);
+       g.fillRect(powerBarX + statusX, powerBarY + statusY, powerWidth, powerBarHeight);
       
   }
 
   public void update(){
 
     updateHealth(); 
+    updatePowerBar();
+
     if(currentHealth <=0){
        if( state != playerConstants.DEAD){
           state = playerConstants.DEAD; 
@@ -149,6 +195,13 @@ public class Player extends Entity
        checkPotionsTouched();
        checkTrapsTouched();
        tileY = (int) (hitBox.y /TILES_SIZE);
+       if(powerAttack){
+          powerAttackTick++;
+          if(powerAttackTick >= 35){
+             powerAttackTick = 0;
+             powerAttack = false;
+          }
+       }
      }
      if(attacking)
        checkAttackHit();
@@ -179,16 +232,22 @@ public class Player extends Entity
          return;
      }
      attackChecked = true;
+     if(powerAttack){
+        attackChecked = false;
+     }
+     
      playing.checkEnemyGetHit(attackBox);
      playing.checkObjectGetHit(attackBox);
   }
 
   private void updateAttackBox(){
-    if(left){
+    
+    if(left || (powerAttack && getFlipW() == -1))
       attackBox.x = hitBox.x - hitBox.width - (int)(10 * GAME_SCALE);
-    }else if(right){
+
+    else if(right || (powerAttack && getFlipW() == 1))
       attackBox.x = hitBox.x +hitBox.width +(int) (10*GAME_SCALE);
-    }
+    
 
   
       attackBox.y = hitBox.y +(int) (10 *GAME_SCALE);
@@ -232,6 +291,13 @@ private void setAnimations(){
        else
        state = playerConstants.FALLING;
     }
+
+    if(powerAttack){
+       state = playerConstants.ATTACKING;
+       aniIndex = 1;
+       aniTick = 0;
+       return;
+    }
     
     if(attacking){
       state = playerConstants.ATTACKING;
@@ -264,9 +330,11 @@ private void setAnimations(){
 
        
       if ( !inAir){
+         if(!powerAttack){
           if((!left && !right) || (right && left)) {
                 return;
           }
+        }
       }
        
       float xSpeed = 0 ;
@@ -281,7 +349,16 @@ private void setAnimations(){
       if ( right)
        xSpeed += walkSpeed;
        
-      
+      if(powerAttack){
+          if(!left && !right){
+             if(getFlipW() == 1)
+               xSpeed = walkSpeed;
+             else if(getFlipW() == -1)
+                xSpeed = -walkSpeed;
+             
+          }
+        xSpeed *= 2 ;
+      }
       
 
       
@@ -293,7 +370,7 @@ private void setAnimations(){
        
          
 
-       if(inAir){
+       if(inAir && !powerAttack){
          if(CanMoveHere( hitBox.x  , hitBox.y + airSpeed , hitBox.width, hitBox.height , lvldata)){
              hitBox.y += airSpeed;
              airSpeed += GRAVITY;
@@ -348,18 +425,7 @@ private void setAnimations(){
  }
 
     
-     public void changeCurrentHealth(int value){
-
-      currentHealth += value;
-       if(currentHealth <= 0 ){
-        currentHealth = 0;
-
-      }
-       else if(currentHealth >= maxHealth){
-        currentHealth = maxHealth;
-       }
-     }
-
+    
      public void LoadImg(){
      
         
@@ -396,7 +462,14 @@ private void setAnimations(){
          this.attacking = attacking;
      }
 
-    
+    public void power(){
+      if(powerAttack)
+         return;
+      if (powerCurrentValue >= 65){
+          powerAttack = true;
+          changePower(-65);
+      }
+    }
      
      public boolean isRight(){
         return right;
@@ -416,6 +489,8 @@ private void setAnimations(){
      public int getYtile(){
       return tileY;
      }
+
+    
 
      public void resetAll(){
       isMoving = false;
