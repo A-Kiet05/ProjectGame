@@ -7,6 +7,7 @@ public class Constant {
 
     public static final float GRAVITY = 0.04f * GAME_SCALE;
     public static final int aniSpeed = 25;
+    public static final int CANNON_DAMAGE = 30;
 
     public static class Projectiles{
         public static final int CANNON_BALL_WIDTH_DEFAULT = 15;

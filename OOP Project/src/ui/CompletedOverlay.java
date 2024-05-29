@@ -67,6 +67,7 @@ public class CompletedOverlay {
            if(isIn(menu, e)){
               if(menu.isMousePressed()){
                   playing.resetAll();
+                  
                   gameStates.state = gameStates.MENU;
                   
               }

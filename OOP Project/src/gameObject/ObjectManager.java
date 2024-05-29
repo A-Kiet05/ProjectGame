@@ -1,6 +1,7 @@
 package gameObject;
 
 import static main.Game.TILES_SIZE;
+import static ultiz.Constant.CANNON_DAMAGE;
 import static ultiz.Constant.ObjectConstants.BARREL;
 import static ultiz.Constant.ObjectConstants.BLUE_POTION;
 import static ultiz.Constant.ObjectConstants.CANNON_HEIGHT;
@@ -154,7 +155,7 @@ public class ObjectManager {
             if(pro.isActive()){
                 pro.updatePos();
                 if(pro.getHitBox().intersects(pl.getHitbox())){
-                    pl.changeCurrentHealth(-25);
+                    pl.changeCurrentHealth(-CANNON_DAMAGE);
                     pro.setActive(false);
                 }
                 else if(CannonBallCollisingToSolid(lvldata , pro)){

@@ -120,8 +120,15 @@ public class helpMethods {
     }
 
     public static boolean CheckCannonsCanShoot(int[][] lvldata ,Rectangle2D.Float firstHitbox , Rectangle2D.Float secondHitbox , int ytile){
-        int firstTileX = (int) ( firstHitbox.x / Game.TILES_SIZE);
+        int firstTileX ;
         int secondTileX = (int) (secondHitbox.x / Game.TILES_SIZE);
+         
+         if(IsSolid(firstHitbox.x, firstHitbox.y + firstHitbox.height + 1, lvldata))
+            firstTileX = (int) (firstHitbox.x / TILES_SIZE);
+         
+         else
+            firstTileX = (int) (firstHitbox.x + firstHitbox.width +1 / TILES_SIZE);
+         
 
         if(firstTileX > secondTileX)
             return IsAllTilesClear(firstTileX, secondTileX, ytile, lvldata);
@@ -138,7 +145,14 @@ public class helpMethods {
 
     public static boolean IsSightClear(int[][] lvldata ,Rectangle2D.Float firstHitbox , Rectangle2D.Float secondHitbox , int ytile ){
         int firstTileX = (int) ( firstHitbox.x / Game.TILES_SIZE);
-        int secondTileX = (int) (secondHitbox.x / Game.TILES_SIZE);
+        int secondTileX;
+
+         if(IsSolid(secondHitbox.x, secondHitbox.y  + secondHitbox.height + 1, lvldata))
+             secondTileX = (int) (secondHitbox.x / TILES_SIZE);
+
+         else
+            secondTileX = (int) (secondHitbox.x + secondHitbox.width + 1 / TILES_SIZE);
+        
 
         if(firstTileX > secondTileX)
            return WalkableTiles(firstTileX , secondTileX , ytile , lvldata);

@@ -40,22 +40,7 @@ public abstract class Entity {
     //     hitBox.y = (int) y ;
     // }
 
-    protected int getFlipX(){
-        if(left){
-            return width;
-        }else{
-            return 0;
-        }
-
-    }
-
-    protected int getFlipW(){
-        if(left){
-            return -1;
-        }else{
-            return 1;
-        }
-    }
+   
 
     protected void drawAttackBox(Graphics g , int offsetLvl){
         g.setColor(Color.red);

@@ -81,9 +81,11 @@ public class Player extends Entity
    private int tileY;
    
    
-    
-    private Playing playing;
-    private boolean attackChecked;
+   private boolean left , right ,  jump;
+   private int flipW = 1 ;
+   private int flipX = 0 ;
+   private Playing playing;
+   private boolean attackChecked;
    
    
 
@@ -196,14 +198,14 @@ public class Player extends Entity
        checkTrapsTouched();
        tileY = (int) (hitBox.y /TILES_SIZE);
        if(powerAttack){
-          powerAttackTick++;
-          if(powerAttackTick >= 35){
-             powerAttackTick = 0;
-             powerAttack = false;
-          }
+           powerAttackTick++;
+            if(powerAttackTick >= 35){
+                 powerAttackTick = 0;
+                 powerAttack = false;
+            }
        }
      }
-     if(attacking)
+     if(attacking || powerAttack)
        checkAttackHit();
        updateAniTick();
        setAnimations();
@@ -212,11 +214,21 @@ public class Player extends Entity
 
   
   public void render(Graphics g , int lvlOffset){
-        
-    g.drawImage(Animations[state][aniIndex],(int)( hitBox.x  - xDrawOffset - lvlOffset + getFlipX()) ,(int) (hitBox.y - yDrawOffset),( width * getFlipW()) , height, null);
-    
+   
+   if(left && !right ){ 
+      flipW = -1;
+      flipX = width;
+      g.drawImage(Animations[state][aniIndex],(int)( hitBox.x  - xDrawOffset - lvlOffset + flipX) ,(int) (hitBox.y - yDrawOffset),( width * flipW) , height, null);
+      
+   }
+   else if(right && !left){
+      g.drawImage(Animations[state][aniIndex],(int)( hitBox.x  - xDrawOffset - lvlOffset + flipX) ,(int) (hitBox.y - yDrawOffset),( width * flipW) , height, null);
+   } 
+   else if ((!left && !right) || ( left && right)){
+      g.drawImage(Animations[state][aniIndex],(int)( hitBox.x  - xDrawOffset - lvlOffset + flipX) ,(int) (hitBox.y - yDrawOffset),( width * flipW) , height, null);
+   }
    //  drawHitbox(g, lvlOffset);
-    // drawAttackBox(g , lvlOffset);
+   //  drawAttackBox(g , lvlOffset);
     drawStatusBar(g);
 }
 
@@ -241,11 +253,13 @@ public class Player extends Entity
   }
 
   private void updateAttackBox(){
+     
+     resetAttackBox();
     
-    if(left || (powerAttack && getFlipW() == -1))
+    if(left || (powerAttack && flipW == -1))
       attackBox.x = hitBox.x - hitBox.width - (int)(10 * GAME_SCALE);
 
-    else if(right || (powerAttack && getFlipW() == 1))
+    else if(right || (powerAttack && flipW == 1))
       attackBox.x = hitBox.x +hitBox.width +(int) (10*GAME_SCALE);
     
 
@@ -341,19 +355,25 @@ private void setAnimations(){
      
      
 
-      if (left )
+      if (left && !right )
         xSpeed -= walkSpeed;
+        flipW = -1;
+        flipX = width ;
         
         
        
-      if ( right)
+      if ( right && !left)
        xSpeed += walkSpeed;
+       flipW = 1;
+       flipX = 0;
        
       if(powerAttack){
-          if(!left && !right){
-             if(getFlipW() == 1)
-               xSpeed = walkSpeed;
-             else if(getFlipW() == -1)
+          if((!left && !right) || (left && right) ){
+
+             if (flipW == 1)
+                xSpeed = walkSpeed;
+
+             else if(flipW == -1)
                 xSpeed = -walkSpeed;
              
           }
@@ -493,18 +513,32 @@ private void setAnimations(){
     
 
      public void resetAll(){
+
       isMoving = false;
       inAir = false;
       attacking = false;
+      airSpeed = 0 ;
       hitBox.x = x;
       hitBox.y = y;
       resetDirection();
       currentHealth = maxHealth;
       state =IDLE;
+       
+      resetAttackBox();
 
         if(!IsEntityOnTheFloor(hitBox, lvldata))
             inAir = true ;
 
+     }
+
+     private void resetAttackBox(){
+       if( flipW == -1)
+         attackBox.x = hitBox.x - hitBox.width - (int)(10 * GAME_SCALE);
+       
+       
+       else if ( flipW == 1)
+         attackBox.x = hitBox.x + hitBox.width +(int) (10*GAME_SCALE);
+       
      }
 
 
