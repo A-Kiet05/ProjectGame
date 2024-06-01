@@ -37,7 +37,7 @@ public class loadSave {
     public static final String OPTIONS = "/images/options_background.png";
 
     public static BufferedImage GetSpritesAtlas(String fileName){
-        BufferedImage img = null;
+         BufferedImage img = null;
          InputStream is = loadSave.class.getResourceAsStream(fileName);
        
        try {
