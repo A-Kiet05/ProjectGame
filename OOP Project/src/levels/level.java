@@ -29,7 +29,7 @@ public class level {
     private ArrayList<Cannon> cannons;
 
  
-     private int lvlTilesWidth ;
+    private int lvlTilesWidth ;
     private int maxTilesOffset ;
     private int lvlMaxOffsetX ;
     private Point player;
